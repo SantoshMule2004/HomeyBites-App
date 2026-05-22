@@ -10,12 +10,14 @@ import { useAppTheme } from '../../stores/useAppTheme'
 import ThemedText from '../../components/ThemedText'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 
+type navigationProp = NativeStackNavigationProp<RootStackParamList>
 
 const Account = () => {
   const colorScheme = useAppTheme()
   // const theme = Colors[colorScheme] ?? Colors.light
 
   const navigation = useNavigation<accountNavigationProp>()
+  const appNavigation = useNavigation<navigationProp>()
 
   const [isLogin, setIsLogin] = useState(false)
 
@@ -28,10 +30,15 @@ const Account = () => {
     )
   }
 
+  const login = () => {
+    // setIsLogin(true)
+    appNavigation.push('Login')
+  }
+
   const onSectionListClicked = (value: string) => {
-    if(value === "EditProfile") 
+    if (value === "EditProfile")
       navigation.navigate('EditProfile')
-    else if(value === "SavedAddresses")
+    else if (value === "SavedAddresses")
       navigation.navigate('SavedAddresses')
   }
 
@@ -46,13 +53,13 @@ const Account = () => {
             </TouchableOpacity>
           </>
           :
-          <TouchableOpacity onPress={() => setIsLogin(true)}>
+          <TouchableOpacity onPress={login}>
             <Text style={{ color: 'skyblue', fontWeight: 'bold', fontSize: 15, textAlign: 'center' }}>Login</Text>
           </TouchableOpacity>
         }
       </View>
 
-      <SectionItemList onClicked={onSectionListClicked}  />
+      <SectionItemList onClicked={onSectionListClicked} />
 
       {/*<ThemedButton onPress={() => navigation.push('Login')}>
             <ThemedText btnText={true}>Login</ThemedText>
