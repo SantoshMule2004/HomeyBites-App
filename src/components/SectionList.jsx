@@ -5,7 +5,7 @@ import { Colors } from '../constants/Colors'
 import { useUserPrefStore } from '../stores/useUserPrefStore'
 import AppThemeDropdown from '../components/AppThemeDropdown'
 
-const SectionItemList = () => {
+const SectionItemList = ({ onClicked }) => {
     const colorScheme = useAppTheme()
     const theme = Colors[colorScheme] ?? Colors.light
 
@@ -36,7 +36,7 @@ const SectionItemList = () => {
             <TouchableOpacity
                 style={[styles.row, { backgroundColor: theme.background, borderBottomColor: theme.uiBackground, borderBottomWidth: 1 }]}
                 disabled={item.type === 'toggle' || item.type === 'dropdown'}
-                onPress={() => console.log(`Navigating to ${item.title}...`)}
+                onPress={() => onClicked(item.id)}
             >
                 <View style={styles.rowLeft}>
                     <Text style={[styles.rowTitle, { color: theme.title }]}>{item.title}</Text>

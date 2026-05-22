@@ -10,23 +10,14 @@ import CustomCarousel from '../components/CustomCarousel'
 import MenuItemList from '../components/MenuItemList'
 import Heading from '../components/Heading'
 import Spacer from '../components/Spacer'
+import { DATA } from '../types/Type'
 
 type navigationProp = NativeStackNavigationProp<RootStackParamList>
 
-const DATA = [
+const data = [
     { id: '1', title: 'Slide 1', color: '#FF6B6B' },
     { id: '2', title: 'Slide 2', color: '#4ECDC4' },
     { id: '3', title: 'Slide 3', color: '#45B7D1' },
-];
-
-const data = [
-    { id: '1', title: 'name', desc: 'desc', price: 'price' },
-    { id: '2', title: 'name', desc: 'desc', price: 'price' },
-    { id: '3', title: 'name', desc: 'desc', price: 'price' },
-    { id: '4', title: 'name', desc: 'desc', price: 'price' },
-    { id: '5', title: 'name', desc: 'desc', price: 'price' },
-    { id: '6', title: 'name', desc: 'desc', price: 'price' },
-    { id: '7', title: 'name', desc: 'desc', price: 'price' },
 ];
 
 const Home = () => {
@@ -47,14 +38,14 @@ const Home = () => {
             </ThemedView>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                <CustomCarousel data={DATA} />
+                <CustomCarousel data={data} />
 
                 <Spacer height={20} />
 
                 <Heading title='Breakfast options' onClick={() => Alert.alert("Breakfast options")} />
                 <Spacer height={5} />
 
-                <MenuItemList data={data} />
+                <MenuItemList data={DATA} />
 
                 <Spacer height={20} />
 
@@ -62,7 +53,7 @@ const Home = () => {
 
                 <Spacer height={5} />
 
-                <MenuItemList data={data} />
+                <MenuItemList data={DATA} />
             </ScrollView>
         </ThemedView>
     )

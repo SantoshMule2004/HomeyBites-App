@@ -3,10 +3,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAppTheme } from '../stores/useAppTheme';
 import { Colors } from '../constants/Colors';
 import Home from '../screens/Home';
-import Account from '../screens/Account';
 import Cart from '../screens/Cart';
-import { CircleUserRound, HomeIcon, ShoppingCart } from 'lucide-react-native';
 import IonIcons from '../components/IonIcons'
+import AccountStackNavigator from './AccountStackNavigator';
 
 const bottomBar = createBottomTabNavigator()
 
@@ -38,7 +37,7 @@ const BottomNavigator = () => {
                 )
             }} />
 
-            <bottomBar.Screen name='Account' component={Account} options={{
+            <bottomBar.Screen name='Account' component={AccountStackNavigator} options={{
                 tabBarIcon:({ focused }) => (
                     <IonIcons size={24} name={focused ? "person-circle" : "person-circle-outline"}
                         color={focused ? theme.iconColorFocused : theme.iconColor} />

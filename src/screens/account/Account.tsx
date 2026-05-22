@@ -1,22 +1,21 @@
 import { Alert, StatusBarStyle, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../navigation/AppNavigator'
+import { RootStackParamList } from '../../navigation/AppNavigator'
 import { useNavigation } from '@react-navigation/native'
-import ThemedView from '../components/ThemedView'
-import SectionItemList from '../components/SectionList'
-import { Colors } from '../constants/Colors'
-import { useAppTheme } from '../stores/useAppTheme'
-import ThemedText from '../components/ThemedText'
+import ThemedView from '../../components/ThemedView'
+import SectionItemList from '../../components/SectionList'
+import { Colors } from '../../constants/Colors'
+import { useAppTheme } from '../../stores/useAppTheme'
+import ThemedText from '../../components/ThemedText'
+import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 
-type navigationProp = NativeStackNavigationProp<RootStackParamList>
 
 const Account = () => {
   const colorScheme = useAppTheme()
   // const theme = Colors[colorScheme] ?? Colors.light
 
-
-  const navigation = useNavigation<navigationProp>()
+  const navigation = useNavigation<accountNavigationProp>()
 
   const [isLogin, setIsLogin] = useState(false)
 
@@ -27,6 +26,13 @@ const Account = () => {
         { text: 'OK', onPress: () => setIsLogin(false) }
       ]
     )
+  }
+
+  const onSectionListClicked = (value: string) => {
+    if(value === "EditProfile") 
+      navigation.navigate('EditProfile')
+    else if(value === "SavedAddresses")
+      navigation.navigate('SavedAddresses')
   }
 
   return (
@@ -46,7 +52,7 @@ const Account = () => {
         }
       </View>
 
-      <SectionItemList />
+      <SectionItemList onClicked={onSectionListClicked}  />
 
       {/*<ThemedButton onPress={() => navigation.push('Login')}>
             <ThemedText btnText={true}>Login</ThemedText>

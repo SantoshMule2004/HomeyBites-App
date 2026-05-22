@@ -4,17 +4,7 @@ import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
 import ThemedButton from '../components/ThemedButton'
 import CartItem from '../components/CartItem'
-
-const DATA = [
-    { id: '1', title: 'name', desc: 'desc', price: 'price' },
-    { id: '2', title: 'name', desc: 'desc', price: 'price' },
-    { id: '3', title: 'name', desc: 'desc', price: 'price' },
-    { id: '4', title: 'name', desc: 'desc', price: 'price' },
-    { id: '5', title: 'name', desc: 'desc', price: 'price' },
-    { id: '6', title: 'name', desc: 'desc', price: 'price' },
-    { id: '7', title: 'name', desc: 'desc', price: 'price' },
-];
-
+import { DATA } from '../types/Type'
 
 const Cart = () => {
   return (
