@@ -1,7 +1,6 @@
 import { Alert, StatusBarStyle, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../navigation/AppNavigator'
 import { useNavigation } from '@react-navigation/native'
 import ThemedView from '../../components/ThemedView'
 import SectionItemList from '../../components/SectionList'
@@ -9,8 +8,7 @@ import { Colors } from '../../constants/Colors'
 import { useAppTheme } from '../../stores/useAppTheme'
 import ThemedText from '../../components/ThemedText'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
-
-type navigationProp = NativeStackNavigationProp<RootStackParamList>
+import { navigationProp } from '../../navigation/AppNavigator'
 
 const Account = () => {
   const colorScheme = useAppTheme()

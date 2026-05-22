@@ -6,11 +6,9 @@ import Spacer from '../../components/Spacer'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedButton from '../../components/ThemedButton'
 import { Colors } from '../../constants/Colors'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../navigation/AppNavigator'
+import { navigationProp } from '../../navigation/AppNavigator'
 import { useNavigation } from '@react-navigation/native'
 
-type navigationProp = NativeStackNavigationProp<RootStackParamList>
 
 const Register = () => {
   const navigation = useNavigation<navigationProp>()

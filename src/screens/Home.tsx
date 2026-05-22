@@ -3,8 +3,7 @@ import React from 'react'
 import ThemedView from '../components/ThemedView'
 import ThemedSearchBar from '../components/ThemedSearchBar'
 import ThemedText from '../components/ThemedText'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../navigation/AppNavigator'
+import { navigationProp } from '../navigation/AppNavigator'
 import { useNavigation } from '@react-navigation/native'
 import CustomCarousel from '../components/CustomCarousel'
 import MenuItemList from '../components/MenuItemList'
@@ -12,7 +11,6 @@ import Heading from '../components/Heading'
 import Spacer from '../components/Spacer'
 import { DATA } from '../types/Type'
 
-type navigationProp = NativeStackNavigationProp<RootStackParamList>
 
 const data = [
     { id: '1', title: 'Slide 1', color: '#FF6B6B' },

@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 import React from 'react'
@@ -16,6 +16,8 @@ export type RootStackParamList = {
     Search: undefined;
     SavedAddresses: undefined;
 };
+
+export type navigationProp = NativeStackNavigationProp<RootStackParamList>
 
 const AppNavigator = () => {
     return (
