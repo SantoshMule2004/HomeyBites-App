@@ -1,4 +1,4 @@
-package com.myapp
+package com.homeybites
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -12,7 +12,7 @@ class MainActivity : ReactActivity() {
      * Returns the name of the main component registered from JavaScript. This is used to schedule
      * rendering of the component.
      */
-    override fun getMainComponentName(): String = "MyApp"
+    override fun getMainComponentName(): String = "homeybites"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = RNScreensFragmentFactory()
