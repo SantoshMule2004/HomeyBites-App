@@ -47,6 +47,8 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
     const translateY = diffClamp.interpolate({
         inputRange: [0, TOTAL_HEADER_HEIGHT],
         outputRange: [0, -TOTAL_HEADER_HEIGHT],
+        extrapolateLeft: 'clamp',
+        extrapolateRight: 'clamp',
     });
 
     return (
