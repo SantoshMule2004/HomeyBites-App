@@ -6,7 +6,7 @@ const EditableImage = ({ onEditPressed }) => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../assets/user-profile.png')}
+                source={require('../assets/user.png')}
                 style={styles.image}
             />
             <IonIcons

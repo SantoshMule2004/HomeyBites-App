@@ -1,8 +1,8 @@
 import { Appearance, StatusBar, StatusBarStyle } from 'react-native';
-import { useAppTheme } from './src/stores/useAppTheme';
-import { useUserPrefStore } from './src/stores/useUserPrefStore';
 import { useEffect } from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
+import { useAppTheme } from './src/stores/useAppTheme';
+import { useUserPrefStore } from './src/stores/useUserPrefStore';
 
 function App() {
   const colorScheme: string = useAppTheme()

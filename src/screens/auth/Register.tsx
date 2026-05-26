@@ -1,13 +1,15 @@
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
+import { navigationProp } from '../../navigation/AppNavigator'
+import { Colors } from '../../constants/Colors'
+
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
 import Spacer from '../../components/Spacer'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedButton from '../../components/ThemedButton'
-import { Colors } from '../../constants/Colors'
-import { navigationProp } from '../../navigation/AppNavigator'
-import { useNavigation } from '@react-navigation/native'
+
 
 
 const Register = () => {
@@ -35,7 +37,11 @@ const Register = () => {
     <ThemedView safe={true} style={styles.container}>
 
       <ThemedView style={styles.header}>
-        <ThemedText style={styles.titleText}>App Name</ThemedText>
+        {/* <ThemedText style={styles.titleText}>App Name</ThemedText> */}
+        <Image
+          source={require('../../assets/homeybites-logo.png')}
+          style={styles.logo}
+        />
       </ThemedView>
 
       <ThemedView style={styles.loginContainer}>
@@ -127,7 +133,7 @@ const Register = () => {
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <ThemedText style={styles.text}>Already have an account? </ThemedText>
-          <ThemedText style={{ color: Colors.primary }} onPress={() => navigation.replace('Login')}>login</ThemedText>
+          <ThemedText style={{ color: Colors.secondary }} onPress={() => navigation.replace('Login')}>login</ThemedText>
         </View>
       </ThemedView>
 
@@ -169,5 +175,10 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     padding: 20,
+  },
+  logo: {
+    width: 150,
+    height: 75,
+    resizeMode: 'center'
   }
 })

@@ -8,13 +8,17 @@ const CartItem = ({ data }) => {
     const colorScheme = useAppTheme()
     const theme = Colors[colorScheme] ?? Colors.light
 
+    const Divider = () => {
+        return <View style={[styles.separator, { backgroundColor: theme.uiBackground }]} />
+    };
+
     const renderItem = ({ item }) => (
-        <View style={[styles.itemContainer, {borderBottomColor: theme.uiBackground,}]}>
+        <View style={[styles.itemContainer]}>
             <View style={styles.cardDesc}>
                 <View style={{ flex: 1 }}>
-                    <Text style={[styles.title, {color: theme.title}]}>{item.title}</Text>
-                    <Text style={[styles.text, {color: theme.text}]}>{item.desc}</Text>
-                    <Text style={[styles.text, {color: theme.text}]}>{item.price}</Text>
+                    <Text style={[styles.title, { color: theme.title }]}>{item.title}</Text>
+                    <Text style={[styles.text, { color: theme.text }]}>{item.desc}</Text>
+                    <Text style={[styles.text, { color: theme.text }]}>{item.price}</Text>
                 </View>
 
                 <CapsuleCounter />
@@ -23,7 +27,7 @@ const CartItem = ({ data }) => {
             <Image
                 style={styles.cardImage}
                 source={{
-                    uri: 'https://imgs.search.brave.com/X4N2evOQAeDBPpwI5xUaQ7pLXDcN68hKSAJHuSkACHA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9vbmxp/bmV0b29scy5jb20v/aW1hZ2VzL2V4YW1w/bGVzLW9ubGluZWlt/YWdldG9vbHMvdHJl/ZS1zdXJyb3VuZGVk/LWJ5LXdhdGVyLXZl/cnRpY2FsLmpwZw'
+                    uri: item.url
                 }}
                 resizeMode='cover' />
         </View>
@@ -35,6 +39,7 @@ const CartItem = ({ data }) => {
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={Divider}
             />
         </View>
     )
@@ -49,10 +54,9 @@ const styles = StyleSheet.create({
     itemContainer: {
         width: '100%',
         flexDirection: 'row',
-        height: 150,
+        minHeight: 150,
         marginBottom: 10,
         padding: 10,
-        borderBottomWidth: 0.5,
     },
     title: {
         fontSize: 18,
@@ -68,5 +72,10 @@ const styles = StyleSheet.create({
     cardDesc: {
         flex: 1,
         paddingHorizontal: 10
-    }
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#E5E7EB',
+        marginHorizontal: 16,
+    },
 })

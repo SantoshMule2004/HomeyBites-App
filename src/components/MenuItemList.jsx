@@ -1,24 +1,26 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Colors } from '../constants/Colors'
 import { useAppTheme } from '../stores/useAppTheme'
 import ThemedText from './ThemedText'
 
-const MenuItemList = ({ data }) => {
+const MenuItemList = ({ data, onItemClicked }) => {
     const colorScheme = useAppTheme()
     const theme = Colors[colorScheme] ?? Colors.light
 
     const renderItem = ({ item }) => (
-        <View style={[styles.itemContainer, { backgroundColor: theme.uiBackground }]}>
+        <Pressable onPress={() => onItemClicked(item.id)}>
+            <View style={[styles.itemContainer, { backgroundColor: theme.uiBackground }]}>
             <Image
                 style={styles.cardImage}
                 source={{
-                    uri: 'https://imgs.search.brave.com/X4N2evOQAeDBPpwI5xUaQ7pLXDcN68hKSAJHuSkACHA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9vbmxp/bmV0b29scy5jb20v/aW1hZ2VzL2V4YW1w/bGVzLW9ubGluZWlt/YWdldG9vbHMvdHJl/ZS1zdXJyb3VuZGVk/LWJ5LXdhdGVyLXZl/cnRpY2FsLmpwZw'
-                }}
+                    uri: item.url
+                    }}
                 resizeMode='cover' />
 
-            <ThemedText style={styles.title}>{item.title}</ThemedText>
+            <ThemedText numberOfLines={1} style={styles.title}>{item.title}</ThemedText>
         </View>
+        </Pressable>
     );
     return (
         <View style={styles.container}>
@@ -44,14 +46,16 @@ const styles = StyleSheet.create({
         marginHorizontal:5,
         paddingBottom: 5,
         borderRadius: 20,
+        width: 120
     },
     title: {
-        fontSize: 18,
-        textAlign: 'center'
+        fontSize: 15,
+        textAlign: 'center',
+        paddingHorizontal: 5
     },
     cardImage: {
-        width: 100,
-        height: 100,
+        width: 120,
+        height: 120,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },

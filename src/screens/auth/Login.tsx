@@ -1,13 +1,14 @@
-import { StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { navigationProp } from '../../navigation/AppNavigator'
+import { Colors } from '../../constants/Colors'
+
 import ThemedView from '../../components/ThemedView'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedButton from '../../components/ThemedButton'
 import ThemedText from '../../components/ThemedText'
 import Spacer from '../../components/Spacer'
-import { Colors } from '../../constants/Colors'
-import { navigationProp } from '../../navigation/AppNavigator'
-import { useNavigation } from '@react-navigation/native'
 
 const Login = () => {
   const navigation = useNavigation<navigationProp>()
@@ -19,7 +20,11 @@ const Login = () => {
     <ThemedView safe={true} style={styles.container}>
 
       <ThemedView style={styles.header}>
-        <ThemedText style={styles.titleText}>App Name</ThemedText>
+        {/* <ThemedText style={styles.titleText}>App Name</ThemedText> */}
+        <Image
+          source={require('../../assets/homeybites-logo.png')}
+          style={styles.logo}
+        />
       </ThemedView>
 
       <ThemedView style={styles.loginContainer}>
@@ -46,7 +51,7 @@ const Login = () => {
         <Spacer height={3} />
 
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <ThemedText style={{ color: Colors.primary }}>Forgot Password?</ThemedText>
+          <ThemedText style={{ color: Colors.secondary }}>Forgot Password?</ThemedText>
         </View>
 
       </ThemedView>
@@ -60,7 +65,7 @@ const Login = () => {
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <ThemedText style={styles.text}>Don't have an account? </ThemedText>
-          <ThemedText style={{ color: Colors.primary }} onPress={() => navigation.replace('Register')}>register</ThemedText>
+          <ThemedText style={{ color: Colors.secondary }} onPress={() => navigation.replace('Register')}>register</ThemedText>
         </View>
       </ThemedView>
 
@@ -100,5 +105,10 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     padding: 20,
+  },
+  logo: {
+    width: 150,
+    height: 75,
+    resizeMode: 'center'
   }
 })

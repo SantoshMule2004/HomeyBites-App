@@ -6,7 +6,7 @@ const ThemedButton = ({ style = {}, ...props }) => {
     const colorScheme = useAppTheme()
     const theme = Colors[colorScheme] ?? Colors.light
     return (
-        <Pressable style={({ pressed }) => [styles.btn, pressed && styles.pressed, { backgroundColor: theme.iconColor }, style]}
+        <Pressable style={({ pressed }) => [styles.btn, pressed && styles.pressed, { backgroundColor: theme.iconColorFocused }, style]}
             {...props} />
     )
 }

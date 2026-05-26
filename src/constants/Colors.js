@@ -1,26 +1,48 @@
 export const Colors = {
-    primary: "#088F8F",
+    primary: "#F97316",
     warnning: "#FF6B6B",
-    secondary: "#F18233",
+    secondary: "#088F8F",
     darkCharcoal: "#303030",
 
+    // dark: {
+    //     text: "#d4d4d4",
+    //     title: "#fff",
+    //     background: "#252231",
+    //     navBackground: "#201e2b",
+    //     iconColor: "#9591a5",
+    //     iconColorFocused: "#fff",
+    //     uiBackground: "#2f2b3d",
+    //     borderBottom: '#eeeeee'
+    // },
     dark: {
-        text: "#d4d4d4",
-        title: "#fff",
-        background: "#252231",
-        navBackground: "#201e2b",
-        iconColor: "#9591a5",
-        iconColorFocused: "#fff",
-        uiBackground: "#2f2b3d"
+        title: '#F9FAFB',
+        text: '#9CA3AF',
+        background: '#121212',
+        uiBackground: '#1F2937',
+        navBackground: '#18181B',
+        iconColor: '#6B7280',
+        iconColorFocused: '#F97316',
+        borderBottom: '#eeeeee'
     },
 
+    // light: {
+    //     text: "#625f72",
+    //     title: "#201e2b",
+    //     background: "#ffffff",
+    //     navBackground: "#e8e7ef",
+    //     iconColor: "#686477",
+    //     iconColorFocused: "#201e2b",
+    //     uiBackground: "#f8f8fa"
+    // }
+
     light: {
-        text: "#625f72",
-        title: "#201e2b",
-        background: "#ffffff",
-        navBackground: "#e8e7ef",
-        iconColor: "#686477",
-        iconColorFocused: "#201e2b",
-        uiBackground: "#f8f8fa"
+        title: '#111827',
+        text: '#4B5563',
+        background: '#F9FAFB',
+        uiBackground: '#FFFFFF',
+        navBackground: '#eeeeee',
+        iconColor: '#9CA3AF',
+        iconColorFocused: '#F97316',
+        borderBottom: '#eeeeee'
     }
 }

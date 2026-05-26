@@ -1,19 +1,18 @@
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
-import ThemedView from '../../components/ThemedView'
-import IonIcons from '../../components/IonIcons'
-import ThemedTextInput from '../../components/ThemedTextInput'
-import ThemedButton from '../../components/ThemedButton'
-import ThemedText from '../../components/ThemedText'
 import { useAppTheme } from '../../stores/useAppTheme'
-import EditableImage from '../../components/EditableImage'
-import VerifyAndUpdate from '../../components/VerifyAndUpdate'
 import { Colors } from '../../constants/Colors'
+
+import EditableImage from '../../components/EditableImage'
 import Spacer from '../../components/Spacer'
+import VerifyAndUpdate from '../../components/VerifyAndUpdate'
+import ThemedView from '../../components/ThemedView'
+import ThemedTextInput from '../../components/ThemedTextInput'
+import ThemedText from '../../components/ThemedText'
 
 const EditProfile = () => {
-  const colorScheme = useAppTheme()
-  const theme = Colors[colorScheme] ?? Colors.light
+  const colorScheme: string = useAppTheme()
+  const theme = colorScheme == "light" ? Colors.light : Colors.dark
 
   const [name, setName] = useState("Alice Karen")
   const [email, setEmail] = useState("alicek@gmail.com")
@@ -33,7 +32,7 @@ const EditProfile = () => {
         <Spacer height={20} />
 
         <Pressable style={styles.updateBtn} onPress={() => Alert.alert("SUBMIT")}>
-          <ThemedText style={{ textAlign: 'center', fontWeight: '700' }}>SUBMIT</ThemedText>
+          <ThemedText style={{ textAlign: 'center', fontWeight: '700', color: theme.iconColorFocused }}>SUBMIT</ThemedText>
         </Pressable>
       </View>
 
@@ -62,5 +61,6 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   updateBtn: {
+    alignSelf: 'center'
   }
 })

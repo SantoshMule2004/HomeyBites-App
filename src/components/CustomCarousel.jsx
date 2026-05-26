@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { useAppTheme } from '../stores/useAppTheme';
 import { Colors } from '../constants/Colors';
@@ -16,13 +16,23 @@ const CustomCarousel = ({ data }) => {
       setActiveIndex(viewableItems[0].index);
     }
   });
-
+  
   const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 50 });
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <View style={[styles.card, { backgroundColor: item.color }]}>
-        <Text style={styles.title}>{item.title}</Text>
+      <View style={[styles.card]}>
+        <ImageBackground
+          source={item.url}
+          style={{ width: '100%', height: '100%' }}
+          imageStyle={styles.imageLayer}
+          resizeMode="cover"
+        >
+          <View style={styles.textWrapper}>
+            <Text style={styles.titleText}>{item.title}</Text>
+            <Text style={styles.subtitleText}>{item.subTitle}</Text>
+          </View>
+        </ImageBackground>
       </View>
     </View>
   );
@@ -66,7 +76,9 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   carouselContainer: {
-    height: 200, // Fixed height for the carousel area
+    height: 225,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   itemContainer: {
     width: width, // Must equal screen width for pagingEnabled to work perfectly
@@ -74,10 +86,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    width: '90%', // Creates a nice margin on the sides of the card
-    height: 175,
+    width: '95%',
+    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 20
+  },
+
+  imageLayer: {
     borderRadius: 20,
     // Shadow for iOS
     shadowColor: '#000',
@@ -87,6 +104,7 @@ const styles = StyleSheet.create({
     // Elevation for Android
     elevation: 6,
   },
+
   title: {
     fontSize: 28,
     fontWeight: 'bold',
@@ -102,14 +120,31 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     marginHorizontal: 6,
-    // transition: 'all 0.3s ease-in-out',
   },
   activeDot: {
     backgroundColor: '#333',
-    width: 24, // Wider dot for the active state (modern look)
+    width: 24,
   },
   inactiveDot: {
     backgroundColor: '#D3D3D3',
     width: 10,
   },
+
+  textWrapper: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 12,
+    borderTopLeftRadius : 20,
+    borderTopRightRadius: 20
+  },
+  titleText: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  subtitleText: {
+    color: '#F3F4F6',
+    fontSize: 16,
+    textAlign: 'center',
+  }
 });

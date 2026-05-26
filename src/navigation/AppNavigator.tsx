@@ -1,23 +1,24 @@
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 
 import React from 'react'
 import Login from '../screens/auth/Login';
 import Register from '../screens/auth/Register';
-import BottomNavigator from './BottomNavigator';
+import BottomNavigator, { BottomParamList } from './BottomNavigator';
 import SearchScreen from '../screens/SearchScreen';
+import SinlgeItemScreen from '../screens/SinlgeItemScreen';
 
-const appStack = createNativeStackNavigator()
 
 export type RootStackParamList = {
-    BottomTabs: undefined;
+    BottomTabs: NavigatorScreenParams<BottomParamList>;
     Login: undefined;
     Register: undefined;
     Search: undefined;
-    SavedAddresses: undefined;
+    SingleItem: { itemId: string };
 };
 
-export type navigationProp = NativeStackNavigationProp<RootStackParamList>
+const appStack = createNativeStackNavigator<RootStackParamList>()
+export type navigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const AppNavigator = () => {
     return (
@@ -27,6 +28,7 @@ const AppNavigator = () => {
                 <appStack.Screen name='Login' component={Login} options={{ headerShown: false, presentation: 'modal' }} />
                 <appStack.Screen name='Register' component={Register} options={{ headerShown: false, presentation: 'modal' }} />
                 <appStack.Screen name='Search' component={SearchScreen} options={{ headerShown: false, presentation: 'modal' }} />
+                <appStack.Screen name='SingleItem' component={SinlgeItemScreen} options={{ headerShown: false, presentation: 'modal' }} />
             </appStack.Navigator>
         </NavigationContainer>
     )

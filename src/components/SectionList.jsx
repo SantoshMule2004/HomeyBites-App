@@ -2,7 +2,6 @@ import { SectionList, StyleSheet, Switch, Text, TouchableOpacity, View } from 'r
 import React, { useState } from 'react'
 import { useAppTheme } from '../stores/useAppTheme'
 import { Colors } from '../constants/Colors'
-import { useUserPrefStore } from '../stores/useUserPrefStore'
 import AppThemeDropdown from '../components/AppThemeDropdown'
 
 const SectionItemList = ({ onClicked }) => {
@@ -13,9 +12,6 @@ const SectionItemList = ({ onClicked }) => {
         bluetoothEnabled: false,
         darkModeEnabled: false,
     });
-
-    const userPref = useUserPrefStore((state) => state.userPref)
-    const setUserPref = useUserPrefStore((state) => state.setUserPref)
 
     const handleToggle = (key) => {
         setToggles(prev => ({ ...prev, [key]: !prev[key] }));
@@ -31,10 +27,14 @@ const SectionItemList = ({ onClicked }) => {
         },
     ];
 
+    const Divider = () => {
+        return <View style={[styles.separator, { backgroundColor: theme.uiBackground }]} />
+    };
+
     const renderItem = ({ item }) => {
         return (
             <TouchableOpacity
-                style={[styles.row, { backgroundColor: theme.background, borderBottomColor: theme.uiBackground, borderBottomWidth: 1 }]}
+                style={[styles.row, { backgroundColor: theme.navBackground }]}
                 disabled={item.type === 'toggle' || item.type === 'dropdown'}
                 onPress={() => onClicked(item.id)}
             >
@@ -58,7 +58,7 @@ const SectionItemList = ({ onClicked }) => {
         );
     };
     return (
-        <View style={[styles.container, { backgroundColor: theme.uiBackground }]}>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
             <SectionList
                 sections={SETTINGS_DATA}
                 keyExtractor={(item) => item.id}
@@ -67,6 +67,7 @@ const SectionItemList = ({ onClicked }) => {
                     <Text style={[styles.sectionHeader, { color: theme.text }]}>{title}</Text>
                 )}
                 stickySectionHeadersEnabled={false}
+                ItemSeparatorComponent={Divider}
             />
         </View>
     )
@@ -81,7 +82,6 @@ const styles = StyleSheet.create({
     sectionHeader: {
         fontSize: 13,
         fontWeight: '600',
-        color: '#6D6D72',
         textTransform: 'uppercase',
         paddingHorizontal: 16,
         paddingTop: 24,
@@ -91,11 +91,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#FFFFFF',
         paddingVertical: 12,
         paddingHorizontal: 16,
-        borderBottomWidth: StyleSheet.hairlineWidth, // Creates ultra-thin native dividers
-        borderBottomColor: '#C6C6C8',
     },
     rowLeft: {
         flexDirection: 'row',
@@ -122,5 +119,9 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#C6C6C8',
         lineHeight: 24,
+    },
+    separator: {
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: '#E5E7EB',
     },
 });

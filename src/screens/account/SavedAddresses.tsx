@@ -1,10 +1,9 @@
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import ThemedView from '../../components/ThemedView'
-import ThemedText from '../../components/ThemedText'
-import CustomAddress from '../../components/CustomAddress'
-import IonIcons from '../../components/IonIcons'
 import { Address } from '../../types/Type'
+
+import ThemedView from '../../components/ThemedView'
+import CustomAddress from '../../components/CustomAddress'
 import CustomTextWithIcon from '../../components/CustomTextWithIcon'
 import Spacer from '../../components/Spacer'
 
@@ -26,7 +25,7 @@ const addNewAddress = () => {
 
 const SavedAddresses = () => {
   return (
-    <ThemedView safe={true} style={styles.container}>
+    <ThemedView  style={styles.container}>
       {/* <TouchableOpacity style={styles.titleContainer} onPress={addNewAddress}>
         <ThemedText title={true} style={styles.title}>Add new address</ThemedText>
         <IonIcons name="chevron-forward" style={{ backgroundColor: 'transparent' }} size={24} />
@@ -46,7 +45,8 @@ export default SavedAddresses
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10
   },
   titleContainer: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',

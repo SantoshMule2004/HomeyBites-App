@@ -6,6 +6,7 @@ import Home from '../screens/Home';
 import Cart from '../screens/Cart';
 import IonIcons from '../components/IonIcons'
 import AccountStackNavigator from './AccountStackNavigator';
+import { TouchableWithoutFeedback, View } from 'react-native';
 
 const bottomBar = createBottomTabNavigator()
 
@@ -25,31 +26,40 @@ const BottomNavigator = () => {
             tabBarStyle: {
                 backgroundColor: theme.navBackground,
                 paddingTop: 10,
-                height: 90
+                height: 90,
+                borderTopWidth: 0
             },
             tabBarActiveTintColor: theme.iconColorFocused,
             tabBarInactiveTintColor: theme.iconColor,
+            tabBarButton: (props) => (
+                <TouchableWithoutFeedback onPress={props.onPress}>
+                    <View style={props.style}>
+                        {props.children}
+                    </View>
+                </TouchableWithoutFeedback>
+            ),
         }}>
             <bottomBar.Screen name='Home' component={Home} options={{
                 tabBarIcon: ({ focused }) => (
                     <IonIcons size={24} name={focused ? "home" : "home-outline"}
-                        color={focused ? theme.iconColorFocused : theme.iconColor} />
+                        style={{ color: focused ? theme.iconColorFocused : theme.iconColor, borderRadius: 0, backgroundColor: 'transparent' }} />
                 )
             }} />
 
             <bottomBar.Screen name='Account' component={AccountStackNavigator} options={{
-                tabBarIcon:({ focused }) => (
+                tabBarIcon: ({ focused }) => (
                     <IonIcons size={24} name={focused ? "person-circle" : "person-circle-outline"}
-                        color={focused ? theme.iconColorFocused : theme.iconColor} />
+                        style={{ color: focused ? theme.iconColorFocused : theme.iconColor, borderRadius: 0, backgroundColor: 'transparent' }} />
                 )
             }} />
 
 
             <bottomBar.Screen name='Cart' component={Cart} options={{
-                tabBarIcon:({ focused }) => (
+                tabBarIcon: ({ focused }) => (
                     <IonIcons size={24} name={focused ? "cart" : "cart-outline"}
-                        color={focused ? theme.iconColorFocused : theme.iconColor} />
-                )
+                        style={{ color: focused ? theme.iconColorFocused : theme.iconColor, borderRadius: 0, backgroundColor: 'transparent' }} />
+                ),
+                tabBarBadge: '2'
             }} />
         </bottomBar.Navigator>
     )

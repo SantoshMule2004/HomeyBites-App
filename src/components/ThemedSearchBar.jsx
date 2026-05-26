@@ -16,8 +16,8 @@ const ThemedSearchBar = ({ onSearch, placeholder, editable = true, style = {} })
     }
 
     return (
-        <View style={[styles.searchBar, { borderColor: theme.uiBackground, backgroundColor: theme.uiBackground }]}>
-            <IonIcons name="search" size={24} style={{ backgroundColor: 'transparent', borderRadius: 0}} />
+        <View style={[styles.searchBar, { borderColor: theme.uiBackground, backgroundColor: theme.uiBackground }, style]}>
+            <IonIcons name="search" size={24} style={{ color: theme.iconColorFocused, backgroundColor: 'transparent', borderRadius: 0}} />
 
             <TextInput
                 style={[styles.textInput, { color: theme.text }]}
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
         minHeight: 45,
         marginHorizontal: 16,
         marginVertical: 10,
-        borderWidth: 1
+        borderWidth: 1,
+        elevation: 2
     },
     textInput: {
         flex: 1,
