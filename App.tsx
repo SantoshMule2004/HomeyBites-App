@@ -3,6 +3,9 @@ import { useEffect } from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useAppTheme } from './src/stores/useAppTheme';
 import { useUserPrefStore } from './src/stores/useUserPrefStore';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   const colorScheme: string = useAppTheme()
@@ -18,10 +21,10 @@ function App() {
   }, [updateSystemTheme]);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <StatusBar barStyle={barStyle} />
       <AppNavigator />
-    </>
+    </QueryClientProvider>
   );
 }
 

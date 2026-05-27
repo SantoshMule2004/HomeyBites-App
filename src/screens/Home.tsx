@@ -10,6 +10,8 @@ import CustomCarousel from '../components/CustomCarousel'
 import MenuItemList from '../components/MenuItemList'
 import Heading from '../components/Heading'
 import Spacer from '../components/Spacer'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Logo from '../components/Logo'
 
 const data = [
     { id: '1', title: 'Ghar Ka Khana', subTitle: '"The Taste of Home, Wherever You Are!"', url: require('../assets/header1.jpeg') },
@@ -18,6 +20,7 @@ const data = [
 
 const Home = () => {
     const navigation = useNavigation<navigationProp>()
+    const insets = useSafeAreaInsets()
 
     const onSearch = (query: string) => {
         console.log("query: ", query)
@@ -29,13 +32,12 @@ const Home = () => {
     }
 
     return (
-        <ThemedView safe={true} style={styles.container}>
+        <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
             <ThemedView style={styles.header}>
                 {/* <ThemedText style={styles.titleText}>App Name/Logo</ThemedText> */}
-                <Image
-                    source={require('../assets/homeybites-logo.png')}
-                    style={styles.logo}
-                />
+                
+                <Logo/>
+
                 <Pressable onPress={() => navigation.navigate('Search')} >
                     <ThemedSearchBar editable={false} placeholder='search' onSearch={onSearch} />
                 </Pressable>

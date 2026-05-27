@@ -9,7 +9,7 @@ import EditProfile from '../screens/account/EditProfile';
 const AccountStack = createNativeStackNavigator();
 
 export type StackParamList = {
-    Account: undefined;
+    AccountInfo: undefined;
     SavedAddresses: undefined;
     EditProfile: undefined;
 }
@@ -28,7 +28,7 @@ const AccountStackNavigator = () => {
         headerTintColor: theme.text
     }}>
       <AccountStack.Screen 
-        name="Account" 
+        name="AccountInfo" 
         component={Account} 
         options={{ headerShown: false }}
       />

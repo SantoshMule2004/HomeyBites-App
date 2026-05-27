@@ -7,7 +7,7 @@ import { Colors } from '../constants/Colors';
 import IonIcons from './IonIcons';
 
 const themeOptions = [
-    // { label: 'System Default', value: 'system', icon: 'phone-portrait' },
+    { label: 'System Default', value: 'system', icon: 'phone-portrait' },
     { label: 'Light Mode', value: 'light', icon: 'sunny' },
     { label: 'Dark Mode', value: 'dark', icon: 'moon' },
 ];
@@ -21,8 +21,8 @@ const AppThemeDropdown = () => {
     const activeTheme = useAppTheme()
 
     const [appTheme, setAppTheme] = useState(userPref || 'light')
-    // const [themeIcon, setThemeIcon] = useState(userPref === 'system' ? 'phone-portrait' : userPref === 'light' ? 'sunny' : 'moon')
-    const [themeIcon, setThemeIcon] = useState(userPref === 'light' ? 'sunny' : 'moon')
+    const [themeIcon, setThemeIcon] = useState(userPref === 'system' ? 'phone-portrait' : userPref === 'light' ? 'sunny' : 'moon')
+    // const [themeIcon, setThemeIcon] = useState(userPref === 'light' ? 'sunny' : 'moon')
 
     const handleThemeToggle = (theme) => {
         console.log("activeTheme: ", activeTheme)
@@ -35,8 +35,8 @@ const AppThemeDropdown = () => {
             case 'dark':
                 setUserPref('dark')
                 break
-            // case 'system':
-            //     setUserPref('system')
+            case 'system':
+                setUserPref('system')
         }
     }
 

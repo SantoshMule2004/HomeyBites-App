@@ -9,6 +9,8 @@ import { navigationProp } from '../../navigation/AppNavigator'
 import SectionItemList from '../../components/SectionList'
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useUserStore } from '../../stores/useUserStore'
 
 const Account = () => {
   const colorScheme = useAppTheme()
@@ -17,19 +19,23 @@ const Account = () => {
   const navigation = useNavigation<accountNavigationProp>()
   const appNavigation = useNavigation<navigationProp>()
 
-  const [isLogin, setIsLogin] = useState(false)
+  const insets = useSafeAreaInsets()
+
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn)
+  const logoutUser = useUserStore((state) => state.logout)
+  const firstName = useUserStore((state) => state.firstName)
+  const lastName = useUserStore((state) => state.lastName)
 
   const logout = () => {
     Alert.alert("Logout", "Are you sure, you want to logout?",
       [
         { text: 'Cancel', onPress: () => console.log('Cancel'), style: 'cancel' },
-        { text: 'OK', onPress: () => setIsLogin(false) }
+        { text: 'OK', onPress: () => logoutUser() }
       ]
     )
   }
 
   const login = () => {
-    // setIsLogin(true)
     appNavigation.push('Login')
   }
 
@@ -41,11 +47,11 @@ const Account = () => {
   }
 
   return (
-    <ThemedView safe={true} style={styles.container}>
-      <View style={[styles.profle, { justifyContent: isLogin ? 'space-between' : 'flex-end', backgroundColor: theme.uiBackground }]}>
-        {isLogin ?
+    <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={[styles.profle, { justifyContent: isLoggedIn ? 'space-between' : 'flex-end', backgroundColor: theme.uiBackground }]}>
+        {isLoggedIn ?
           <>
-            <ThemedText style={styles.text}>Name</ThemedText>
+            <ThemedText style={styles.text}>{firstName} {lastName}</ThemedText>
             <TouchableOpacity onPress={logout}>
               <Text style={{ color: Colors.warnning, fontWeight: 'bold', fontSize: 15, textAlign: 'center' }}>Logout</Text>
             </TouchableOpacity>
@@ -73,10 +79,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 75,
-    // backgroundColor: '#fff',
     borderRadius: 20,
     elevation: 6,
-    // borderColor: 'black',
     padding: 20,
     marginHorizontal: 10,
     marginVertical: 5

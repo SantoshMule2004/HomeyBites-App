@@ -1,8 +1,7 @@
-{
   "extends": "@react-native/typescript-config",
   "compilerOptions": {
     "types": ["jest"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "src/stores/useUserPrefStore.js", "src/components/CustomCarousel.jsx", "src/components/SectionList.jsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/stores/useUserPrefStore.js", "src/components/CustomCarousel.jsx", "src/components/SectionList.jsx", "src/components/SecureTextInput.jsx"],
   "exclude": ["**/node_modules", "**/Pods"]
 }

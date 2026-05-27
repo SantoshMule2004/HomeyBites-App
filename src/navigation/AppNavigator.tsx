@@ -25,8 +25,8 @@ const AppNavigator = () => {
         <NavigationContainer>
             <appStack.Navigator>
                 <appStack.Screen name='BottomTabs' component={BottomNavigator} options={{ headerShown: false }} />
-                <appStack.Screen name='Login' component={Login} options={{ headerShown: false }} />
-                <appStack.Screen name='Register' component={Register} options={{ headerShown: false }} />
+                <appStack.Screen name='Login' component={Login} options={{ headerShown: false, presentation: 'modal', animation: 'none' }} />
+                <appStack.Screen name='Register' component={Register} options={{ headerShown: false, presentation: 'modal', animation: 'none' }} />
                 <appStack.Screen name='Search' component={SearchScreen} options={{ headerShown: false }} />
                 <appStack.Screen name='SingleItem' component={SinlgeItemScreen} options={{ headerShown: false }} />
             </appStack.Navigator>

@@ -22,7 +22,8 @@ export const Colors = {
         navBackground: '#18181B',
         iconColor: '#6B7280',
         iconColorFocused: '#F97316',
-        borderBottom: '#eeeeee'
+        borderBottom: '#eeeeee',
+        logo: require('../assets/title-logo-dark.png')
     },
 
     // light: {
@@ -40,9 +41,10 @@ export const Colors = {
         text: '#4B5563',
         background: '#F9FAFB',
         uiBackground: '#FFFFFF',
-        navBackground: '#eeeeee',
+        navBackground: '#F3F4F6',
         iconColor: '#9CA3AF',
         iconColorFocused: '#F97316',
-        borderBottom: '#eeeeee'
+        borderBottom: '#eeeeee',
+        logo: require('../assets/title-logo-light.png')
     }
 }

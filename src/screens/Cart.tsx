@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { cart } from '../types/Type'
 
 import React from 'react'
@@ -8,13 +8,16 @@ import ThemedButton from '../components/ThemedButton'
 import CartItem from '../components/CartItem'
 import { useAppTheme } from '../stores/useAppTheme'
 import { Colors } from '../constants/Colors'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const Cart = () => {
   const colorScheme: string = useAppTheme()
   const theme = colorScheme == "light" ? Colors.light : Colors.dark
 
+  const insets = useSafeAreaInsets()
+
   return (
-    <ThemedView safe={true} style={[styles.container]}>
+    <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
       <ThemedView style={[styles.header, { backgroundColor: theme.uiBackground }]}>
         <View>
           <ThemedText style={{ fontSize: 20, fontWeight: '600' }}>Subtotal</ThemedText>

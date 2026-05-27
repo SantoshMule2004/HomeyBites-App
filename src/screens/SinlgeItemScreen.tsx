@@ -51,6 +51,14 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
         extrapolateRight: 'clamp',
     });
 
+    const onScroll = (event: any) => {
+        const y = event.nativeEvent.contentOffset.y;
+
+        if (y < 0) return;
+
+        scrollY.setValue(y);
+    };
+
     return (
         <ThemedView safe={true} style={styles.container}>
             <Animated.View
@@ -60,13 +68,13 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
                 ]}
             >
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-                    <IonIcons name="arrow-back"  style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={24} />
+                    <IonIcons name="arrow-back" style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={24} />
                 </TouchableOpacity>
 
                 <ThemedSearchBar placeholder='search' onSearch={onSearch} style={{ width: '70%', marginHorizontal: 10 }} />
 
                 <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('BottomTabs', { screen: 'Cart' })}>
-                    <IonIcons name={cartItemCount > 0 ? "cart" : "cart-outline"}  style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={24} />
+                    <IonIcons name={cartItemCount > 0 ? "cart" : "cart-outline"} style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={24} />
                     <View style={styles.badge}>
                         <Text style={styles.badgeText}>
                             {cartItemCount > 99 ? '99+' : cartItemCount}
@@ -76,12 +84,15 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
             </Animated.View>
 
             <Animated.ScrollView
-                style={[styles.itemContainer, { paddingTop: HEADER_HEIGHT - 20 }]}
-                contentContainerStyle={{ paddingBottom: 50 }}
-                onScroll={Animated.event(
-                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                    { useNativeDriver: true }
-                )}
+                style={[styles.itemContainer]}
+                contentContainerStyle={{ paddingTop: HEADER_HEIGHT - 20 }}
+                onScroll={
+                    onScroll
+                    //     Animated.event(
+                    //     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                    //     { useNativeDriver: true }
+                    // )
+                }
                 scrollEventThrottle={16}
                 showsVerticalScrollIndicator={false}>
                 <Image
@@ -128,8 +139,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     itemContainer: {
-        flex: 1,
-        minHeight: 200
+        flex: 1
     },
     title: {
         fontSize: 18,

@@ -10,7 +10,7 @@ const CustomTextWithIcon = ({ text, iconName, addNewAddress }) => {
     const theme = Colors[colorScheme] ?? Colors.light
 
     return (
-        <TouchableOpacity style={[styles.titleContainer, { backgroundColor: theme.uiBackground}]} onPress={addNewAddress}>
+        <TouchableOpacity style={[styles.titleContainer, { backgroundColor: theme.background}]} onPress={addNewAddress}>
             <ThemedText title={true} style={styles.title}>{text}</ThemedText>
             <IonIcons name={iconName} style={{ backgroundColor: 'transparent' }} size={24} />
         </TouchableOpacity>

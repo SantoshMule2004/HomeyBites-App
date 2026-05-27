@@ -1,34 +1,86 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { navigationProp } from '../../navigation/AppNavigator'
 import { Colors } from '../../constants/Colors'
+import { useAppTheme } from '../../stores/useAppTheme'
+import { useMutation } from '@tanstack/react-query'
+import { login } from '../../services/AuthService'
+import { useUserStore } from '../../stores/useUserStore'
 
 import ThemedView from '../../components/ThemedView'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedButton from '../../components/ThemedButton'
 import ThemedText from '../../components/ThemedText'
 import Spacer from '../../components/Spacer'
+import Logo from '../../components/Logo'
+import SecureTextInput from '../../components/SecureTextInput'
+import axios from 'axios'
 
 const Login = () => {
   const navigation = useNavigation<navigationProp>()
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const colorScheme: string = useAppTheme()
+  const theme = colorScheme == "light" ? Colors.light : Colors.dark
+
+  const [emailId, setEmailId] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [isPasswordVisible, setisPasswordVisible] = useState(false)
+
+  const saveLogin = useUserStore((state) => state.login)
+
+  const togglePasswordVisibility = () => {
+    setisPasswordVisible(!isPasswordVisible)
+  }
+
+  const loginUserMutation = useMutation({
+    mutationFn: login,
+    onSuccess: async (data) => {
+      if (data?.status != "success") {
+        Alert.alert(data?.message)
+        return
+      }
+      console.log("Login Successfully..!", data.user)
+
+      saveLogin(data.user.userId, data.user.firstName, data.user.lastName, data.user.emailId, data.user.phoneNo, data.user.dob, data.user.gender, data.user.dietryPref, data.user.userRole, data.token)
+      Alert.alert("Logged in successfully..!")
+
+      navigation.navigate('BottomTabs', { screen: 'Home' })
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const backendMessage = error.response?.data?.message;
+        console.log("Backend Message:", backendMessage);
+        Alert.alert(backendMessage)
+      } else {
+        console.log("Generic Error:", error.message);
+      }
+    }
+  })
+
+  const loginUser = () => {
+    if (!emailId?.trim()) {
+      Alert.alert("Please enter email id")
+      return
+    }
+
+    if (!password?.trim()) {
+      Alert.alert("Please enter password")
+      return
+    }
+
+    loginUserMutation.mutate({ "username": emailId, "password": password })
+  }
 
   return (
     <ThemedView safe={true} style={styles.container}>
 
       <ThemedView style={styles.header}>
-        {/* <ThemedText style={styles.titleText}>App Name</ThemedText> */}
-        <Image
-          source={require('../../assets/homeybites-logo.png')}
-          style={styles.logo}
-        />
+        <Logo />
       </ThemedView>
 
       <ThemedView style={styles.loginContainer}>
-        <ThemedText title={true} style={[styles.text, { textAlign: 'left' }]}>
+        <ThemedText title={true} style={[styles.text, { textAlign: 'left', color: Colors.primary }]}>
           Login to get started
         </ThemedText>
 
@@ -36,17 +88,20 @@ const Login = () => {
 
         <ThemedTextInput
           placeholder="Enter email ID"
-          value={email}
-          onChange={(item: string) => setEmail(item)}
-          style={styles.textInput} />
+          value={emailId}
+          onChangeText={setEmailId}
+          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
 
         <Spacer height={10} />
 
-        <ThemedTextInput
-          placeholder="Enter password"
+        <SecureTextInput
           value={password}
-          onChange={(item: string) => setPassword(item)}
-          style={styles.textInput} />
+          style={styles.textInput}
+          setValue={setPassword}
+          onClicked={togglePasswordVisibility}
+          placeholder="Enter password"
+          secureTextEntry={!isPasswordVisible}
+          iconName={isPasswordVisible ? "eye" : "eye-off"} />
 
         <Spacer height={3} />
 
@@ -57,9 +112,9 @@ const Login = () => {
       </ThemedView>
 
       <ThemedView style={styles.btnContainer}>
-        <ThemedButton>
+        <ThemedButton disabled={loginUserMutation.isPending} onPress={loginUser}>
           <ThemedText btnText={true} style={styles.text}>
-            Login
+            {loginUserMutation.isPending ? "Loading..." : "Login"}
           </ThemedText>
         </ThemedButton>
 
@@ -93,10 +148,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   textInput: {
-    // width: '80%'
+    padding: 10,
+    borderBottomWidth: 1,
+    marginBottom: 15,
+    backgroundColor: 'transparent',
   },
   text: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: 15
   },
   titleText: {
     textAlign: 'center',
@@ -106,9 +166,5 @@ const styles = StyleSheet.create({
   btnContainer: {
     padding: 20,
   },
-  logo: {
-    width: 150,
-    height: 75,
-    resizeMode: 'center'
-  }
+
 })

@@ -1,22 +1,30 @@
-import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { navigationProp } from '../../navigation/AppNavigator'
 import { Colors } from '../../constants/Colors'
+import { useAppTheme } from '../../stores/useAppTheme'
 
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
 import Spacer from '../../components/Spacer'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedButton from '../../components/ThemedButton'
-
-
+import Logo from '../../components/Logo'
+import SecureTextInput from '../../components/SecureTextInput'
+import { useMutation } from '@tanstack/react-query'
+import { register, sendOtptoVerifyEmail, verifyOtpOnServer } from '../../services/AuthService'
+import axios from 'axios'
 
 const Register = () => {
   const navigation = useNavigation<navigationProp>()
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
+  const colorScheme: string = useAppTheme()
+  const theme = colorScheme == "light" ? Colors.light : Colors.dark
+
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [emailId, setEmailId] = useState("")
   const [phoneNo, setPhoneNo] = useState("")
   const [password, setPassword] = useState("")
   const [cPassword, setCPassword] = useState("")
@@ -24,73 +32,158 @@ const Register = () => {
   const [isVerified, setIsVerified] = useState(false)
   const [isOtpVisible, setIsOtpVisible] = useState(false)
 
+  const [isPasswordVisible, setisPasswordVisible] = useState(false)
+  const [isCPasswordVisible, setisCPasswordVisible] = useState(false)
+
+  const registerUserMutation = useMutation({
+    mutationFn: register,
+    onSuccess: async (data) => {
+      if (!data?.success) {
+        Alert.alert(data?.message)
+        return
+      }
+
+      console.log("Registered successfully..!", data.message)
+      Alert.alert("Registered successfully, log in to continue")
+
+      navigation.navigate('Login')
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const backendMessage = error.response?.data?.message;
+        console.log("Backend Message:", backendMessage);
+        Alert.alert(backendMessage)
+      } else {
+        console.log("Generic Error:", error.message);
+      }
+    }
+  })
+
+  const sendOtpMutation = useMutation({
+    mutationFn: sendOtptoVerifyEmail,
+    onSuccess: async (data) => {
+      if (!data?.success) {
+        Alert.alert(data?.message)
+        return
+      }
+
+      console.log("OTP sent", data.message)
+      Alert.alert(data.message)
+      setIsOtpVisible(true)
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const backendMessage = error.response?.data?.message;
+        console.log("Backend Message:", backendMessage);
+        Alert.alert(backendMessage)
+      } else {
+        console.log("Generic Error:", error.message);
+      }
+    }
+  })
+
+  const verifyEmailMutation = useMutation({
+    mutationFn: verifyOtpOnServer,
+    onSuccess: async (data) => {
+      if (!data?.success) {
+        Alert.alert(data?.message)
+        return
+      }
+
+      console.log("OTP sent", data.message)
+      Alert.alert(data.message)
+      setIsVerified(true)
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const backendMessage = error.response?.data?.message;
+        console.log("Backend Message:", backendMessage);
+        Alert.alert(backendMessage)
+      } else {
+        console.log("Generic Error:", error.message);
+      }
+    }
+  })
+
   const verifyEmailId = () => {
-    Alert.alert("isVerified: isVerified")
-    setIsOtpVisible(true)
+    sendOtpMutation.mutate(emailId)
+  }
+
+  const verifyOtp = () => {
+    verifyEmailMutation.mutate({ otp, emailId })
   }
 
   const registerUser = () => {
     Alert.alert("Register User")
   }
 
+
+
   return (
     <ThemedView safe={true} style={styles.container}>
 
       <ThemedView style={styles.header}>
-        {/* <ThemedText style={styles.titleText}>App Name</ThemedText> */}
-        <Image
-          source={require('../../assets/homeybites-logo.png')}
-          style={styles.logo}
-        />
+        <Logo />
       </ThemedView>
 
       <ThemedView style={styles.loginContainer}>
-        <ThemedText title={true} style={[styles.text, { textAlign: 'left' }]}>
+        <ThemedText title={true} style={[styles.text, { textAlign: 'left', color: Colors.primary }]}>
           Register
         </ThemedText>
 
         <Spacer height={20} />
 
         <ThemedTextInput
-          placeholder="Enter your name"
-          value={name}
-          onChange={(item: string) => setName(item)}
-          style={styles.textInput} />
+          placeholder="Enter your first name"
+          value={firstName}
+          onChangeText={setFirstName}
+          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
+
+        <Spacer height={10} />
+
+        <ThemedTextInput
+          placeholder="Enter your last name"
+          value={lastName}
+          onChangeText={setLastName}
+          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
 
         <Spacer height={10} />
 
         <ThemedTextInput
           placeholder="Enter email ID"
-          value={email}
-          onChange={(item: string) => setEmail(item)}
-          style={styles.textInput} />
+          value={emailId}
+          onChangeText={setEmailId}
+          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
 
         <Spacer height={10} />
 
         <ThemedTextInput
           placeholder="Enter Phone number"
           value={phoneNo}
-          onChange={(item: string) => setPhoneNo(item)}
-          style={styles.textInput} />
+          onChangeText={setPhoneNo}
+          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
 
         <Spacer height={10} />
 
-        <ThemedTextInput
-          placeholder="Enter password"
+        <SecureTextInput
           value={password}
-          onChange={(item: string) => setPassword(item)}
           style={styles.textInput}
-          secureTextEntry={true}
-        />
+          setValue={setPassword}
+          onClicked={() => setisPasswordVisible(!isPasswordVisible)}
+          placeholder="Enter password"
+          secureTextEntry={!isPasswordVisible}
+          iconName={isPasswordVisible ? "eye" : "eye-off"} />
 
         <Spacer height={10} />
 
-        <ThemedTextInput
-          placeholder="Confirm password"
+        <SecureTextInput
           value={cPassword}
-          onChange={(item: string) => setCPassword(item)}
           style={styles.textInput}
-          secureTextEntry={true} />
+          setValue={setCPassword}
+          onClicked={() => setisCPasswordVisible(!isCPasswordVisible)}
+          placeholder="Confirm password"
+          secureTextEntry={!isCPasswordVisible}
+          iconName={isCPasswordVisible ? "eye" : "eye-off"} />
 
         {isOtpVisible &&
           <>
@@ -100,36 +193,42 @@ const Register = () => {
               placeholder="Enter the OTP"
               value={otp}
               onChange={(item: string) => setOtp(item)}
-              style={styles.textInput}
+              style={[styles.textInput, { borderBottomColor: theme.uiBackground }]}
               secureTextEntry={true} />
           </>}
       </ThemedView>
 
       <ThemedView style={styles.btnContainer}>
-        {!isOtpVisible &&
+        {/* {!isOtpVisible &&
           <>
             <Spacer height={20} />
             <ThemedButton onPress={verifyEmailId}>
               <ThemedText btnText={true} style={styles.text}>
-                Verify Email
+
               </ThemedText>
             </ThemedButton>
           </>
 
-        }
+        } */}
 
-        {isOtpVisible && <>
+        <Spacer height={20} />
+        <ThemedButton disabled={sendOtpMutation.isPending || verifyEmailMutation.isPending || registerUserMutation.isPending} onPress={isOtpVisible ? isVerified ? registerUser : verifyOtp : verifyEmailId}>
+          <ThemedText btnText={true} style={styles.text}>
+            {sendOtpMutation.isPending || verifyEmailMutation.isPending || registerUserMutation.isPending ? "Loading..." : isOtpVisible ? isVerified ? "Register" : "Verify OTP" : "Verify Email"}
+          </ThemedText>
+        </ThemedButton>
 
+        {/* {isOtpVisible && <>
 
           <Spacer height={20} />
 
           <ThemedButton onPress={registerUser}>
             <ThemedText btnText={true} style={styles.text}>
-              Register
+              Verify OTP
             </ThemedText>
           </ThemedButton>
         </>
-        }
+        } */}
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <ThemedText style={styles.text}>Already have an account? </ThemedText>
@@ -163,10 +262,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   textInput: {
-    // width: '80%'
+    padding: 10,
+    borderBottomWidth: 1,
+    marginBottom: 15,
+    backgroundColor: 'transparent',
   },
   text: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: 15
   },
   titleText: {
     textAlign: 'center',
@@ -176,9 +280,4 @@ const styles = StyleSheet.create({
   btnContainer: {
     padding: 20,
   },
-  logo: {
-    width: 150,
-    height: 75,
-    resizeMode: 'center'
-  }
 })
