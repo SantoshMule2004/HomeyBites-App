@@ -9,14 +9,22 @@ import VerifyAndUpdate from '../../components/VerifyAndUpdate'
 import ThemedView from '../../components/ThemedView'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedText from '../../components/ThemedText'
+import { useUserStore } from '../../stores/useUserStore'
 
 const EditProfile = () => {
   const colorScheme: string = useAppTheme()
   const theme = colorScheme == "light" ? Colors.light : Colors.dark
 
-  const [name, setName] = useState("Alice Karen")
-  const [email, setEmail] = useState("alicek@gmail.com")
-  const [phoneNo, setPhoneNO] = useState("+919878653467")
+  const fName = useUserStore((state) => state.firstName)
+  const lName = useUserStore((state) => state.lastName)
+  const eId = useUserStore((state) => state.emailId)
+  const pNo = useUserStore((state) => state.phoneNo)
+
+  const [firstName, setFirstName] = useState(fName)
+  const [lastName, setLastName] = useState(lName)
+  const [email, setEmail] = useState(eId)
+  const [phoneNo, setPhoneNO] = useState(pNo)
+
   return (
     <ThemedView safe={true} style={{ flex: 1 }}>
       <View style={styles.profile}>
@@ -26,8 +34,13 @@ const EditProfile = () => {
       <Spacer />
 
       <View style={{ marginHorizontal: 10 }}>
-        <ThemedText style={styles.text}>Name</ThemedText>
-        <ThemedTextInput style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} onChangeText={setName} value={name} autoCapitalize='none' />
+        <ThemedText style={styles.text}>First name</ThemedText>
+        <ThemedTextInput style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} onChangeText={setFirstName} value={firstName} autoCapitalize='none' />
+
+        <Spacer height={10} />
+
+        <ThemedText style={styles.text}>Last name</ThemedText>
+        <ThemedTextInput style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} onChangeText={setLastName} value={lastName} autoCapitalize='none' />
 
         <Spacer height={20} />
 

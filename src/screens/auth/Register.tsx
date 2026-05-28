@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import { navigationProp } from '../../navigation/AppNavigator'
 import { Colors } from '../../constants/Colors'
 import { useAppTheme } from '../../stores/useAppTheme'
+import { useMutation } from '@tanstack/react-query'
+import { register, sendOtptoVerifyEmail, verifyOtpOnServer } from '../../services/AuthService'
 
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
@@ -12,8 +14,6 @@ import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedButton from '../../components/ThemedButton'
 import Logo from '../../components/Logo'
 import SecureTextInput from '../../components/SecureTextInput'
-import { useMutation } from '@tanstack/react-query'
-import { register, sendOtptoVerifyEmail, verifyOtpOnServer } from '../../services/AuthService'
 import axios from 'axios'
 
 const Register = () => {
@@ -114,10 +114,8 @@ const Register = () => {
   }
 
   const registerUser = () => {
-    Alert.alert("Register User")
+    registerUserMutation.mutate({ firstName, middleName: '', lastName, emailId, phoneNo, isVerified, password, cPassword })
   }
-
-
 
   return (
     <ThemedView safe={true} style={styles.container}>

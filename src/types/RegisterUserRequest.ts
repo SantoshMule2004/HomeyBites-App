@@ -5,8 +5,6 @@ export interface RegisterUserRequest {
     emailId: string;
     isVerified: boolean;
     phoneNo: string;
-    dob: string;
-    gender: string;
     password: string;
     cPassword: string;
 }
