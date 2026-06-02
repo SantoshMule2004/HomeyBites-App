@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet } from 'react-native'
 import React from 'react'
 import { Address } from '../../types/Type'
 
@@ -6,37 +6,39 @@ import ThemedView from '../../components/ThemedView'
 import CustomAddress from '../../components/CustomAddress'
 import CustomTextWithIcon from '../../components/CustomTextWithIcon'
 import Spacer from '../../components/Spacer'
+import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
+import { useNavigation } from '@react-navigation/native'
+import { navigationProp } from '../../navigation/AppNavigator'
 
 const data: Address[] = [
   { name: 'alice', apartment: 'XYZ', street: '40th 11th', city: 'AC', state: 'MH', pinCode: 12, phoneNo: 12 },
 ]
-
-const onEdit = (id: string) => {
-  // Alert.alert("Edit Clicked")
-}
-
-const onRemove = (id: string) => {
-  // Alert.alert("Remove Clicked")
-}
-
-const addNewAddress = () => {
-  Alert.alert("new address")
-}
-
 const SavedAddresses = () => {
+  const navigation = useNavigation<accountNavigationProp>()
+    const appNavigation = useNavigation<navigationProp>()
+
+  const onEdit = (id: string) => {
+    // Alert.alert("Edit Clicked")
+  }
+
+  const onRemove = (id: string) => {
+    Alert.alert("Delete Address", "Do you really want to delete this address?",
+      [
+        { text: 'Cancel', onPress: () => console.log('Cancel'), style: 'cancel' },
+        { text: 'OK' }
+      ]
+    )
+  }
+
+  const addNewAddress = () => {
+    appNavigation.navigate('AddAddress')
+  }
+
   return (
-    <ThemedView  style={styles.container}>
-      {/* <TouchableOpacity style={styles.titleContainer} onPress={addNewAddress}>
-        <ThemedText title={true} style={styles.title}>Add new address</ThemedText>
-        <IonIcons name="chevron-forward" style={{ backgroundColor: 'transparent' }} size={24} />
-      </TouchableOpacity> */}
-
+    <ThemedView style={styles.container}>
       <CustomTextWithIcon text="Add new address" iconName="chevron-forward" addNewAddress={addNewAddress} />
-
       <Spacer height={10} />
-
       <CustomAddress data={data} onEditPressed={onEdit} onRemovedPressed={onRemove} />
-
     </ThemedView>
   )
 }

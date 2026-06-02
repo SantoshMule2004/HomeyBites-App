@@ -29,7 +29,7 @@ const Register = () => {
   const [password, setPassword] = useState("")
   const [cPassword, setCPassword] = useState("")
   const [otp, setOtp] = useState("")
-  const [isVerified, setIsVerified] = useState(false)
+  const [isVerified, setIsVerified] = useState(true) // setting true for now, change to false when email service is running
   const [isOtpVisible, setIsOtpVisible] = useState(false)
 
   const [isPasswordVisible, setisPasswordVisible] = useState(false)
@@ -135,7 +135,7 @@ const Register = () => {
           placeholder="Enter your first name"
           value={firstName}
           onChangeText={setFirstName}
-          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
+          style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
 
         <Spacer height={10} />
 
@@ -143,7 +143,7 @@ const Register = () => {
           placeholder="Enter your last name"
           value={lastName}
           onChangeText={setLastName}
-          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
+          style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
 
         <Spacer height={10} />
 
@@ -151,7 +151,7 @@ const Register = () => {
           placeholder="Enter email ID"
           value={emailId}
           onChangeText={setEmailId}
-          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
+          style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
 
         <Spacer height={10} />
 
@@ -159,7 +159,7 @@ const Register = () => {
           placeholder="Enter Phone number"
           value={phoneNo}
           onChangeText={setPhoneNo}
-          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
+          style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
 
         <Spacer height={10} />
 
@@ -191,7 +191,7 @@ const Register = () => {
               placeholder="Enter the OTP"
               value={otp}
               onChange={(item: string) => setOtp(item)}
-              style={[styles.textInput, { borderBottomColor: theme.uiBackground }]}
+              style={[styles.textInput, { borderBottomColor: theme.borderBottom }]}
               secureTextEntry={true} />
           </>}
       </ThemedView>
@@ -210,11 +210,11 @@ const Register = () => {
         } */}
 
         <Spacer height={20} />
-        <ThemedButton disabled={sendOtpMutation.isPending || verifyEmailMutation.isPending || registerUserMutation.isPending} onPress={isOtpVisible ? isVerified ? registerUser : verifyOtp : verifyEmailId}>
+        {/* <ThemedButton disabled={sendOtpMutation.isPending || verifyEmailMutation.isPending || registerUserMutation.isPending} onPress={isOtpVisible ? isVerified ? registerUser : verifyOtp : verifyEmailId}>
           <ThemedText btnText={true} style={styles.text}>
             {sendOtpMutation.isPending || verifyEmailMutation.isPending || registerUserMutation.isPending ? "Loading..." : isOtpVisible ? isVerified ? "Register" : "Verify OTP" : "Verify Email"}
           </ThemedText>
-        </ThemedButton>
+        </ThemedButton> */}
 
         {/* {isOtpVisible && <>
 
@@ -227,6 +227,12 @@ const Register = () => {
           </ThemedButton>
         </>
         } */}
+
+        <ThemedButton disabled={registerUserMutation.isPending} onPress={registerUser}>
+          <ThemedText btnText={true} style={styles.text}>
+            {registerUserMutation.isPending ? "Loading..." : "Register"}
+          </ThemedText>
+        </ThemedButton>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <ThemedText style={styles.text}>Already have an account? </ThemedText>

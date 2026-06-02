@@ -6,21 +6,6 @@ export type dataType = {
   url: string
 }
 
-// export const DATA: dataType[] = [
-//     { id: '1', title: 'name1', desc: 'desc', price: 'price', url: '' },
-//     { id: '2', title: 'name2', desc: 'desc', price: 'price', url: '' },
-//     { id: '3', title: 'name3', desc: 'desc', price: 'price', url: '' },
-//     { id: '4', title: 'name4', desc: 'desc', price: 'price', url: '' },
-//     { id: '5', title: 'name5', desc: 'desc', price: 'price', url: '' },
-//     { id: '6', title: 'name6', desc: 'desc', price: 'price', url: '' },
-//     { id: '7', title: 'name7', desc: 'desc', price: 'price', url: '' },
-//     { id: '8', title: 'name8', desc: 'desc', price: 'price', url: '' },
-//     { id: '9', title: 'name9', desc: 'desc', price: 'price', url: '' },
-//     { id: '10', title: 'name10', desc: 'desc', price: 'price', url: '' },
-//     { id: '11', title: 'name11', desc: 'desc', price: 'price', url: '' },
-//     { id: '12', title: 'name12', desc: 'desc', price: 'price', url: '' },
-// ];
-
 export const breakfast: dataType[] = [
   // --- BREAKFAST ITEMS ---
   {
@@ -146,4 +131,54 @@ export type Address = {
   state: string,
   pinCode: number,
   phoneNo: number
+}
+
+
+
+export type LocationIQAddress = {
+  name?: string;
+  house_number?: string;
+  road?: string;
+  neighbourhood?: string;
+  suburb?: string;
+  city_district?: string;
+  city?: string;
+  county?: string;
+  state?: string;
+  postcode?: string;
+  country?: string;
+  country_code?: string;
+  // Index signature to safely catch any unexpected geographic fields 
+  // without throwing TypeScript errors
+  [key: string]: string | undefined;
+};
+
+
+export type LocationIQAutocompleteResult = {
+  place_id: string;
+  osm_id?: string;
+  osm_type?: string;
+
+  lat: string;
+  lon: string;
+
+  boundingbox?: [string, string, string, string];
+
+  class?: string;
+  type?: string;
+
+  // Display fields
+  display_name: string;
+  display_place?: string;
+  display_address?: string;
+
+  address?: LocationIQAddress;
+};
+
+export type Add = {
+  display_name: string;
+  display_place?: string;
+  display_address?: string;
+  lat: string;
+  lon: string;
 }

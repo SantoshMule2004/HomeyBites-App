@@ -20,15 +20,16 @@ const SectionItemList = ({ onClicked }) => {
         {
             title: 'Account settings',
             data: [
+                { id: 'AppTheme', title: 'App Theme', type: 'dropdown', stateKey: 'darkModeEnabled' },
                 { id: 'EditProfile', title: 'Edit Profile', type: 'link', subtitle: '' },
                 { id: 'SavedAddresses', title: 'Saved Addresses', type: 'link', subtitle: '' },
-                { id: 'AppTheme', title: 'App Theme', type: 'dropdown', stateKey: 'darkModeEnabled' },
+                { id: 'ForgetPassword', title: 'Forget Password?', type: 'link', subtitle: '' },
             ],
         },
     ];
 
     const Divider = () => {
-        return <View style={[styles.separator, { backgroundColor: theme.uiBackground }]} />
+        return <View style={[styles.separator, { backgroundColor: theme.borderBottom }]} />
     };
 
     const renderItem = ({ item }) => {

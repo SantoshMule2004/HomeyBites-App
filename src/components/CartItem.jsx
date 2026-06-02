@@ -3,13 +3,14 @@ import React from 'react'
 import CapsuleCounter from '../components/CapsuleCounter'
 import { useAppTheme } from '../stores/useAppTheme'
 import { Colors } from '../constants/Colors'
+import ThemedText from './ThemedText'
 
 const CartItem = ({ data }) => {
     const colorScheme = useAppTheme()
     const theme = Colors[colorScheme] ?? Colors.light
 
     const Divider = () => {
-        return <View style={[styles.separator, { backgroundColor: theme.uiBackground }]} />
+        return <View style={[styles.separator, { backgroundColor: theme.borderBottom }]} />
     };
 
     const renderItem = ({ item }) => (
@@ -32,6 +33,13 @@ const CartItem = ({ data }) => {
                 resizeMode='cover' />
         </View>
     );
+
+    const EmptyMenu = () => {
+        return <View style={[styles.container, { alignItems: 'center', marginTop: 70 }]}>
+            <ThemedText style={{ fontWeight: '400', fontSize: 18 }}>Cart is Empty</ThemedText>
+        </View>
+    }
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -40,6 +48,7 @@ const CartItem = ({ data }) => {
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={Divider}
+                ListEmptyComponent={EmptyMenu}
             />
         </View>
     )

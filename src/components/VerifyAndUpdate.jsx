@@ -10,7 +10,7 @@ const VerifyAndUpdate = ({ value, setValue, text, btnText, onClicked, style = {}
     const theme = Colors[colorScheme] ?? Colors.light
 
     return (
-        <View style={[styles.container, { borderBottomColor: theme.uiBackground },  style ]}>
+        <View style={[styles.container, { borderBottomColor: theme.borderBottom },  style ]}>
             <View style={{ flex: 1 }}>
                 <ThemedText style={styles.text}>{text}</ThemedText>
                 <ThemedTextInput style={[styles.textInput]} onChangeText={setValue} value={value} autoCapitalize='none' />

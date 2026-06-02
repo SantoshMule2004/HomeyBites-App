@@ -1,12 +1,21 @@
-import { Keyboard, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Keyboard, StyleProp, StyleSheet, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Colors } from '../constants/Colors'
 import { useAppTheme } from '../stores/useAppTheme'
 import IonIcons from './IonIcons'
 
-const ThemedSearchBar = ({ onSearch, placeholder, editable = true, style = {} }) => {
+export interface SearchBarProps {
+    placeholder?: string;
+    textInput?: string;
+    setTextInput?: Dispatch<SetStateAction<string>>;
+    onSearch: (query: string) => void;
+    style?: StyleProp<ViewStyle>;
+    editable?: boolean
+}
+
+const ThemedSearchBar = ({ textInput = '', setTextInput = undefined, onSearch, placeholder, editable = true, style = {} }: SearchBarProps) => {
     const colorScheme = useAppTheme()
-    const theme = Colors[colorScheme] ?? Colors.light
+    const theme = colorScheme == "light" ? Colors.light : Colors.dark
 
     const [query, setQuery] = useState("")
 
@@ -17,14 +26,14 @@ const ThemedSearchBar = ({ onSearch, placeholder, editable = true, style = {} })
 
     return (
         <View style={[styles.searchBar, { borderColor: theme.uiBackground, backgroundColor: theme.uiBackground }, style]}>
-            <IonIcons name="search" size={24} style={{ color: theme.iconColorFocused, backgroundColor: 'transparent', borderRadius: 0}} />
+            <IonIcons name="search" size={24} style={{ color: theme.iconColorFocused, backgroundColor: 'transparent', borderRadius: 0 }} />
 
             <TextInput
                 style={[styles.textInput, { color: theme.text }]}
-                value={query}
+                value={textInput ? textInput : query}
                 placeholder={placeholder}
                 placeholderTextColor={theme.text}
-                onChangeText={(newText) => setQuery(newText)}
+                onChangeText={setTextInput ? setTextInput : setQuery}
                 onSubmitEditing={() => onSearch(query)}
                 returnKeyType="search"
                 autoCapitalize='none'
@@ -34,7 +43,7 @@ const ThemedSearchBar = ({ onSearch, placeholder, editable = true, style = {} })
 
             {query.length > 0 &&
                 <TouchableOpacity onPress={handleClear} style={styles.btnClear}>
-                    <IonIcons name="close" size={24} style={{ backgroundColor: 'transparent', borderRadius: 0}} />
+                    <IonIcons name="close" size={24} style={{ backgroundColor: 'transparent', borderRadius: 0 }} />
                 </TouchableOpacity>
             }
         </View>

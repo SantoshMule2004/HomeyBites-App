@@ -35,12 +35,12 @@ const EditProfile = () => {
 
       <View style={{ marginHorizontal: 10 }}>
         <ThemedText style={styles.text}>First name</ThemedText>
-        <ThemedTextInput style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} onChangeText={setFirstName} value={firstName} autoCapitalize='none' />
+        <ThemedTextInput style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} onChangeText={setFirstName} value={firstName} autoCapitalize='none' />
 
         <Spacer height={10} />
 
         <ThemedText style={styles.text}>Last name</ThemedText>
-        <ThemedTextInput style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} onChangeText={setLastName} value={lastName} autoCapitalize='none' />
+        <ThemedTextInput style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} onChangeText={setLastName} value={lastName} autoCapitalize='none' />
 
         <Spacer height={20} />
 

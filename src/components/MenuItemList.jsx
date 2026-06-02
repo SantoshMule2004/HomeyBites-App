@@ -11,17 +11,24 @@ const MenuItemList = ({ data, onItemClicked }) => {
     const renderItem = ({ item }) => (
         <Pressable onPress={() => onItemClicked(item.id)}>
             <View style={[styles.itemContainer, { backgroundColor: theme.uiBackground }]}>
-            <Image
-                style={styles.cardImage}
-                source={{
-                    uri: item.url
+                <Image
+                    style={styles.cardImage}
+                    source={{
+                        uri: item.url
                     }}
-                resizeMode='cover' />
+                    resizeMode='cover' />
 
-            <ThemedText numberOfLines={1} style={styles.title}>{item.title}</ThemedText>
-        </View>
+                <ThemedText numberOfLines={1} style={styles.title}>{item.title}</ThemedText>
+            </View>
         </Pressable>
     );
+
+    const EmptyMenu = () => {
+        return <View style={[{ alignItems: 'center', justifyContent: 'center', padding: 20 }]}>
+            <ThemedText style={{ fontWeight: '300', fontSize: 15 }}>Currently no items available</ThemedText>
+        </View>
+    }
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -30,6 +37,7 @@ const MenuItemList = ({ data, onItemClicked }) => {
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
+                ListEmptyComponent={EmptyMenu}
             />
         </View>
     )
@@ -43,7 +51,7 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         // margin: 5,
-        marginHorizontal:5,
+        marginHorizontal: 5,
         paddingBottom: 5,
         borderRadius: 20,
         width: 120

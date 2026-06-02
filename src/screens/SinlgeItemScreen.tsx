@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 4,
         borderWidth: 2,
-        borderColor: '#FFFFFF',
     },
     badgeText: {
         color: '#FFFFFF',

@@ -90,7 +90,7 @@ const Login = () => {
           placeholder="Enter email ID"
           value={emailId}
           onChangeText={setEmailId}
-          style={[styles.textInput, { borderBottomColor: theme.uiBackground }]} />
+          style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
 
         <Spacer height={10} />
 

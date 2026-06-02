@@ -28,7 +28,7 @@ const ItemList = ({ data, onItemClicked }) => {
     );
 
     const Divider = () => {
-        return <View style={[styles.separator, { backgroundColor: theme.uiBackground }]} />
+        return <View style={[styles.separator, { backgroundColor: theme.borderBottom }]} />
     };
 
     const EmptyMenu = () => {

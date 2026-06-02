@@ -11,7 +11,7 @@ const SecureTextInput = ({ value, setValue, iconName, onClicked, style = {}, tex
     const theme = colorScheme == "light" ? Colors.light : Colors.dark
 
     return (
-        <View style={[styles.container, { borderBottomColor: theme.uiBackground, }, style]}>
+        <View style={[styles.container, { borderBottomColor: theme.borderBottom, }, style]}>
             <View style={{ flex: 1 }}>
                 <ThemedTextInput style={[styles.textInput]}
                     secureTextEntry={secureTextEntry}
