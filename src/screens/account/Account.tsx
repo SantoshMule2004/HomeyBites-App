@@ -46,6 +46,8 @@ const Account = () => {
       navigation.navigate('SavedAddresses')
     else if (value === "ForgetPassword")
       navigation.navigate('ForgetPassword')
+    else if (value === "ResetPassword")
+      navigation.navigate('ResetPassword')
   }
 
   return (

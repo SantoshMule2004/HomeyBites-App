@@ -114,7 +114,7 @@ const Register = () => {
   }
 
   const registerUser = () => {
-    registerUserMutation.mutate({ firstName, middleName: '', lastName, emailId, phoneNo, isVerified, password, cPassword })
+    registerUserMutation.mutate({ firstName, middleName: '', lastName, emailId, phoneNo, verified: isVerified, password, cPassword })
   }
 
   return (

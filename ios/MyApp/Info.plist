@@ -60,5 +60,8 @@
  	<array>
   		<string>Ionicons.ttf</string>
 	</array>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your exact location to check you in.</string>
 </dict>
 </plist>

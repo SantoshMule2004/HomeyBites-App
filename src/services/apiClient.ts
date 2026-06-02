@@ -1,7 +1,6 @@
 import axios from "axios";
 import { mmkvKey } from "../constants/mmkvKeys";
 import { useUserStore } from "../stores/useUserStore";
-import { LocationIQAutocompleteResult } from "../types/Type";
 
 export const PublicApiClient = axios.create({
     baseURL: mmkvKey.PUBLIC_URL,
@@ -49,25 +48,3 @@ PrivateApiClient.interceptors.response.use((response) => {
 
     return Promise.reject(error)
 })
-
-export const LocationIQClient = axios.create({
-    baseURL: 'https://api.locationiq.com',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-})
-
-export const autocompleteAddress = async (query: string) => {
-    const response = await LocationIQClient.get<LocationIQAutocompleteResult[]>(`/v1/autocomplete`,
-        {
-            params: {
-                key: 'pk.ab1a66e1233e369fdf0eec4a9a9555d9',
-                q: query,
-                limit: 5,
-                countrycodes: 'in', // e.g., Restrict to India
-                dedupe: 1,
-            },
-        }
-    )
-    return response.data
-}

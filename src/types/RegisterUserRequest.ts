@@ -3,7 +3,7 @@ export interface RegisterUserRequest {
     middleName: string;
     lastName: string;
     emailId: string;
-    isVerified: boolean;
+    verified: boolean;
     phoneNo: string;
     password: string;
     cPassword: string;

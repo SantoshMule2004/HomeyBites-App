@@ -24,6 +24,7 @@ const SectionItemList = ({ onClicked }) => {
                 { id: 'EditProfile', title: 'Edit Profile', type: 'link', subtitle: '' },
                 { id: 'SavedAddresses', title: 'Saved Addresses', type: 'link', subtitle: '' },
                 { id: 'ForgetPassword', title: 'Forget Password?', type: 'link', subtitle: '' },
+                { id: 'ResetPassword', title: 'Reset Password', type: 'link', subtitle: '' },
             ],
         },
     ];

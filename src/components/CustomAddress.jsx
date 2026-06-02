@@ -5,40 +5,48 @@ import ThemedCard from './ThemedCard';
 import { useAppTheme } from '../stores/useAppTheme';
 import { Colors } from '../constants/Colors';
 
-const CustomAddress = ({ data, onEditPressed, onRemovedPressed }) => {
+const CustomAddress = ({ data, onEditPressed, onRemovedPressed, refreshControl = {} }) => {
   const colorScheme = useAppTheme()
   const theme = Colors[colorScheme] ?? Colors.light
 
   const renderItem = ({ item }) => {
     return (
       <ThemedCard style={styles.addressContainer}>
-        <ThemedText style={{ fontWeight: 'bold' }}>{item.name}</ThemedText>
-        <ThemedText>{item.apartment}, {item.street}</ThemedText>
-        <ThemedText>{item.city}, {item.state}</ThemedText>
-        <ThemedText>India</ThemedText>
-        <ThemedText>Phone Number: {item.phoneNo}</ThemedText>
+        <ThemedText style={{ fontWeight: 'bold' }}>{item.receiverName}</ThemedText>
+        <ThemedText>{item.addressLine}, {item.area}</ThemedText>
+        <ThemedText>Phone Number: {item.receiverContactNo}</ThemedText>
 
         <View style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}>
           <Pressable style={({ pressed }) => [
             styles.btn, { borderColor: theme.navBackground },
             pressed && [styles.buttonPressed, { backgroundColor: theme.navBackground }]
-          ]} onPress={() => onEditPressed(item.name)}>
+          ]} onPress={() => onEditPressed(item.addId)}>
             <ThemedText style={{ paddingHorizontal: 5 }}>edit</ThemedText>
           </Pressable>
           <Pressable style={({ pressed }) => [
             styles.btn, { borderColor: theme.navBackground },
             pressed && [styles.buttonPressed, { backgroundColor: theme.navBackground }]
-          ]} onPress={() => onRemovedPressed(item.name)}>
+          ]} onPress={() => onRemovedPressed(item.addId)}>
             <ThemedText style={{ paddingHorizontal: 5 }}>remove</ThemedText>
           </Pressable>
         </View>
       </ThemedCard>
     );
-  };
+  }
+
+  const EmptyMenu = () => {
+    return <View style={[{ alignItems: 'center', justifyContent: 'center', padding: 20 }]}>
+      <ThemedText style={{ fontWeight: '300', fontSize: 15 }}>No address found</ThemedText>
+    </View>
+  }
+
+
   return (
     <FlatList data={data}
       renderItem={renderItem}
-      showsVerticalScrollIndicator={false} />
+      showsVerticalScrollIndicator={false}
+      ListEmptyComponent={EmptyMenu}
+      refreshControl={refreshControl} />
   )
 }
 
@@ -46,7 +54,8 @@ export default CustomAddress
 
 const styles = StyleSheet.create({
   addressContainer: {
-    marginTop: 5, marginHorizontal: 10, borderRadius: 10, elevation: 5
+    marginTop: 5, marginHorizontal: 10, borderRadius: 10, elevation: 5,
+    gap: 5
   },
   btn: {
     flexDirection: 'row',

@@ -41,6 +41,11 @@ export interface AddressRequest {
     receiverContactNo: string;
 }
 
+export interface AddressPayload {
+    userId: number
+    addressRequest: AddressRequest
+}
+
 export interface Address {
     addId: number;
     addressLine: string;

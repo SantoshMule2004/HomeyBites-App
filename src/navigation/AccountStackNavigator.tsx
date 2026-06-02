@@ -8,6 +8,7 @@ import EditProfile from '../screens/account/EditProfile';
 import ForgetPassword from '../screens/account/ForgetPassword';
 import AddAddress from '../screens/account/AddAddress';
 import AddNewAddress from '../screens/account/AddNewAddress';
+import ResetPassword from '../screens/account/ResetPassword';
 
 const AccountStack = createNativeStackNavigator();
 
@@ -16,7 +17,7 @@ export type StackParamList = {
   SavedAddresses: undefined;
   EditProfile: undefined;
   ForgetPassword: undefined;
-  // AddAddress: undefined;
+  ResetPassword: undefined;
 }
 
 export type accountNavigationProp = NativeStackNavigationProp<StackParamList>
@@ -51,6 +52,11 @@ const AccountStackNavigator = () => {
         name="ForgetPassword"
         component={ForgetPassword}
         options={{ title: 'Forget Password', animation: 'fade_from_bottom' }}
+      />
+      <AccountStack.Screen
+        name="ResetPassword"
+        component={ResetPassword}
+        options={{ title: 'Reset Password', animation: 'fade_from_bottom' }}
       />
       {/* <AccountStack.Screen
         name="AddAddress"

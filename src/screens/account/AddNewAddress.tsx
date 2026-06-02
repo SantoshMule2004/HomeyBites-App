@@ -1,14 +1,14 @@
-import { Alert, FlatList, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, FlatList, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { Colors } from '../../constants/Colors'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useDebounce } from '../../hooks/useDebounce'
-import { autocompleteAddress } from '../../services/apiClient'
 import { LocationIQAutocompleteResult } from '../../types/Type'
 import { navigationProp } from '../../navigation/AppNavigator'
+import { autocomplete } from '../../services/LocationIQService'
 
 import ThemedView from '../../components/ThemedView'
 import ThemedSearchBar from '../../components/ThemedSearchBar'
@@ -17,6 +17,7 @@ import ThemedCard from '../../components/ThemedCard'
 import ThemedText from '../../components/ThemedText'
 import ThemedButton from '../../components/ThemedButton'
 import Spacer from '../../components/Spacer'
+import { useCurrentLocation } from '../../hooks/useCurrentLocation'
 
 
 const AddNewAddress = () => {
@@ -24,6 +25,12 @@ const AddNewAddress = () => {
     const appNavigation = useNavigation<navigationProp>()
     const colorScheme = useAppTheme()
     const theme = colorScheme == "light" ? Colors.light : Colors.dark
+
+    const { coords, displayAdd, address: fullAddress, loading, error: useLocationError, refreshLocation } = useCurrentLocation();
+
+    useEffect(() => {
+        refreshLocation();
+    }, [refreshLocation]);
 
     const [textInput, setTextInput] = useState("")
     const [data, setData] = useState<LocationIQAutocompleteResult>()
@@ -33,18 +40,18 @@ const AddNewAddress = () => {
     }
 
     const handleConfirm = () => {
-        if (!data) {
+        if (!displayAdd && !data) {
             Alert.alert("Please enter valid address")
             return
         }
 
         appNavigation.navigate('ConfirmAddress', {
             address: {
-                display_name: data?.display_name!,
-                display_address: data?.display_address,
-                display_place: data?.display_place,
-                lat: data?.lat!,
-                lon: data?.lon!
+                display_name: data?.display_name! ? data?.display_name! : fullAddress!,
+                display_address: data?.display_address ? data?.display_address : fullAddress!.split(',')[1],
+                display_place: data?.display_place ? data?.display_place : displayAdd,
+                lat: data?.lat! ? data?.lat! : coords?.lat.toString()!,
+                lon: data?.lon! ? data?.lon! : coords?.lon.toString()!
             }
         })
     }
@@ -57,7 +64,7 @@ const AddNewAddress = () => {
 
     const { data: results = [], isLoading, isFetching, error } = useQuery({
         queryKey: ['locationAutocomplete', debouncedQuery],
-        queryFn: () => autocompleteAddress(debouncedQuery),
+        queryFn: () => autocomplete(debouncedQuery),
         enabled: debouncedQuery.length > 0,
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10,
@@ -98,10 +105,19 @@ const AddNewAddress = () => {
             </View>
 
             <ThemedCard style={styles.card}>
-                <ThemedText style={[styles.text, { fontWeight: '500' }]}>{data?.display_place || data?.display_name.split(',')[0]}</ThemedText>
-                <ThemedText style={[styles.text, {}]}>{data?.display_address || data?.display_name}</ThemedText>
+                {loading
+                    ?
+                    <View style={{ minHeight: 50, alignItems: 'center', justifyContent: 'center' }}>
+                        <ActivityIndicator color={Colors.primary} size={25} />
+                    </View>
+                    :
+                    <>
+                        <ThemedText style={[styles.text, { fontWeight: '500' }]}>{(data?.display_place || data?.display_name.split(',')[1]) || displayAdd}</ThemedText>
+                        <ThemedText style={[styles.text, {}]}>{(data?.display_address || data?.display_name) || fullAddress}</ThemedText>
+                    </>
+                }
 
-                <Spacer height={10}/>
+                <Spacer height={10} />
                 <ThemedButton onPress={handleConfirm}>
                     <ThemedText btnText={true} style={styles.btnText}>Confirm & Proceed</ThemedText>
                 </ThemedButton>
@@ -121,7 +137,7 @@ const styles = StyleSheet.create({
     },
     card: {
         padding: 10,
-        margin:10
+        margin: 10
     },
     btnText: {
         textAlign: 'center',

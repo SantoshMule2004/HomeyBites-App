@@ -1,4 +1,4 @@
-import { Alert, StyleSheet } from 'react-native'
+import { Alert, RefreshControl, StyleSheet, View } from 'react-native'
 import React from 'react'
 import { Address } from '../../types/Type'
 
@@ -9,23 +9,40 @@ import Spacer from '../../components/Spacer'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 import { useNavigation } from '@react-navigation/native'
 import { navigationProp } from '../../navigation/AppNavigator'
+import { useUserStore } from '../../stores/useUserStore'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { deleteAddress, getAddresses } from '../../services/UserService'
+import ThemedText from '../../components/ThemedText'
+import { useAppTheme } from '../../stores/useAppTheme'
+import { Colors } from '../../constants/Colors'
+import axios from 'axios'
 
-const data: Address[] = [
-  { name: 'alice', apartment: 'XYZ', street: '40th 11th', city: 'AC', state: 'MH', pinCode: 12, phoneNo: 12 },
-]
+
 const SavedAddresses = () => {
   const navigation = useNavigation<accountNavigationProp>()
-    const appNavigation = useNavigation<navigationProp>()
+  const appNavigation = useNavigation<navigationProp>()
 
-  const onEdit = (id: string) => {
+  const colorScheme = useAppTheme()
+  const theme = colorScheme == "light" ? Colors.light : Colors.dark
+
+  const userId = useUserStore((state) => state.userId)
+
+  const { data, isPending, isFetching, error, refetch, } = useQuery({
+    queryKey: ['user-addresses'],
+    queryFn: () => getAddresses(userId),
+    enabled: true,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const onEdit = (id: number) => {
     // Alert.alert("Edit Clicked")
   }
 
-  const onRemove = (id: string) => {
+  const onRemove = (id: number) => {
     Alert.alert("Delete Address", "Do you really want to delete this address?",
       [
         { text: 'Cancel', onPress: () => console.log('Cancel'), style: 'cancel' },
-        { text: 'OK' }
+        { text: 'OK', onPress: () => deleteAddressMutation.mutate(id) }
       ]
     )
   }
@@ -34,11 +51,42 @@ const SavedAddresses = () => {
     appNavigation.navigate('AddAddress')
   }
 
+  const deleteAddressMutation = useMutation({
+    mutationFn: deleteAddress,
+    onSuccess: async (data) => {
+      console.log(data.message)
+      Alert.alert(data.message)
+
+      refetch()
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const backendMessage = error.response?.data?.message;
+        console.log("Backend Message:", backendMessage);
+        Alert.alert(backendMessage)
+      } else {
+        console.log("Generic Error:", error.message);
+      }
+    }
+  })
+
   return (
     <ThemedView style={styles.container}>
       <CustomTextWithIcon text="Add new address" iconName="chevron-forward" addNewAddress={addNewAddress} />
       <Spacer height={10} />
-      <CustomAddress data={data} onEditPressed={onEdit} onRemovedPressed={onRemove} />
+      {isPending
+        ?
+        <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+          <ThemedText style={{ fontWeight: '300', fontSize: 15 }}>loading addresse...</ThemedText>
+        </View>
+        :
+        <CustomAddress data={data} onEditPressed={onEdit} onRemovedPressed={onRemove} refreshControl={<RefreshControl
+          refreshing={isFetching}
+          onRefresh={refetch}
+          tintColor={Colors.primary}
+          colors={[Colors.primary]}
+        />} />
+      }
     </ThemedView>
   )
 }

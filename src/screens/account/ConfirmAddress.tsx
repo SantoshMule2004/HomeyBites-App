@@ -11,6 +11,10 @@ import ThemedButton from '../../components/ThemedButton'
 import ThemedText from '../../components/ThemedText'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import Spacer from '../../components/Spacer'
+import { useUserStore } from '../../stores/useUserStore'
+import { useMutation } from '@tanstack/react-query'
+import { addAddress } from '../../services/UserService'
+import axios from 'axios'
 
 type ConfirmAddressProps = NativeStackScreenProps<RootStackParamList, 'ConfirmAddress'>;
 
@@ -18,13 +22,15 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
     const colorScheme = useAppTheme()
     const theme = colorScheme == "light" ? Colors.light : Colors.dark
 
-    const [fullName, setFullName] = useState("")
-    const [contactNo, setContactNo] = useState("")
+    const fName = useUserStore((state) => state.firstName)
+    const lName = useUserStore((state) => state.lastName)
+    const pNo = useUserStore((state) => state.phoneNo)
+    const userId = useUserStore((state) => state.userId)
+
+    const [fullName, setFullName] = useState(`${fName} ${lName}`)
+    const [contactNo, setContactNo] = useState(pNo)
     const [addLine, setAddline] = useState("")
-    const [area, setArea] = useState("")
-    const [landmark, setLandmark] = useState("")
-    const [latitude, setLatitude] = useState(route.params.address.lat)
-    const [longitude, setLongitude] = useState(route.params.address.lon)
+    const [street, setStreet] = useState("")
 
     const onSubmit = () => {
         if (!fullName.trim() || !contactNo.trim() || !addLine.trim()) {
@@ -32,9 +38,43 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
             return
         }
 
-        Alert.alert("Address added successfully")
-        navigation.navigate('BottomTabs', { screen: 'Account' })
+        Alert.alert("Confirm details", "",
+            [
+                { text: 'Edit details', onPress: () => console.log('Cancel'), style: 'cancel' },
+                {
+                    text: 'Confirm', onPress: () => addAddressMutation.mutate({
+                        userId,
+                        addressRequest: {
+                            addressLine: addLine,
+                            area: route.params.address.display_name,
+                            latitude: route.params.address.lat,
+                            longitude: route.params.address.lon,
+                            receiverContactNo: contactNo,
+                            receiverName: fullName
+                        }
+                    })
+                }
+            ]
+        )
     }
+
+    const addAddressMutation = useMutation({
+        mutationFn: addAddress,
+        onSuccess: async (data) => {
+            console.log(data.message)
+            Alert.alert(data.message)
+            navigation.navigate('BottomTabs', { screen: 'Account' })
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                const backendMessage = error.response?.data?.message;
+                console.log("Backend Message:", backendMessage);
+                Alert.alert(backendMessage)
+            } else {
+                console.log("Generic Error:", error.message);
+            }
+        }
+    })
 
     return (
         <ThemedView safe={true} style={[styles.container, { paddingBottom: Platform.OS === 'android' ? 20 : 0 }]} >
@@ -85,8 +125,8 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
                     <ThemedText style={{ fontSize: 12, fontWeight: '500' }}>Street</ThemedText>
                     <ThemedTextInput
                         // placeholder="street"
-                        value={area}
-                        onChangeText={setArea}
+                        value={street}
+                        onChangeText={setStreet}
                         style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
 
                     <ThemedText style={{ fontSize: 12, fontWeight: '500' }}>Area/locality*</ThemedText>

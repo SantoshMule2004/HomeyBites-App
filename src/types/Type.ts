@@ -175,6 +175,23 @@ export type LocationIQAutocompleteResult = {
   address?: LocationIQAddress;
 };
 
+export type LocationIQReverseResult = {
+  place_id: string;
+  osm_id?: string;
+  osm_type?: string;
+  
+  lat: string;
+  lon: string;
+  
+  display_name: string;
+  
+  address: LocationIQAddress;
+  
+  boundingbox?: [string, string, string, string]; 
+  
+  distance?: number; 
+};
+
 export type Add = {
   display_name: string;
   display_place?: string;

@@ -1,6 +1,6 @@
 import { ApiResponse } from "../types/RegisterUserRequest"
 import { LocationIQAutocompleteResult } from "../types/Type"
-import { Address, AddressRequest, PasswordDto, UserInfo } from "../types/UserResponse"
+import { Address, AddressPayload, AddressRequest, PasswordDto, UserInfo } from "../types/UserResponse"
 import { PrivateApiClient, PublicApiClient } from "./apiClient"
 
 export const getCurrentUser = async () => {
@@ -9,7 +9,7 @@ export const getCurrentUser = async () => {
 }
 
 export const updateUser = async (userId: number, data: UserInfo) => {
-     const response = await PrivateApiClient.put<ApiResponse<null>>(`/api/v1/users/${userId}`, data)
+    const response = await PrivateApiClient.put<ApiResponse<null>>(`/api/v1/users/${userId}`, data)
     return response.data
 }
 
@@ -29,8 +29,8 @@ export const resetPassword = async (passwordData: PasswordDto) => {
 }
 
 // user address related API calls
-export const addAddress = async (userId: number, data: AddressRequest) => {
-    const response = await PrivateApiClient.post<ApiResponse<Address>>(`/api/v1/user/${userId}/address`, data)
+export const addAddress = async (data: AddressPayload) => {
+    const response = await PrivateApiClient.post<ApiResponse<Address>>(`/api/v1/user/${data.userId}/address`, data.addressRequest)
     return response.data
 }
 
