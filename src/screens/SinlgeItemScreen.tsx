@@ -2,7 +2,7 @@ import { Alert, Animated, Image, StyleSheet, Text, TouchableOpacity, View } from
 import React, { useRef, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { Address, rawData } from '../types/Type';
+import { rawData } from '../types/Type';
 import { useAppTheme } from '../stores/useAppTheme';
 import { Colors } from '../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,14 +11,10 @@ import ThemedView from '../components/ThemedView'
 import Spacer from '../components/Spacer';
 import ThemedButton from '../components/ThemedButton';
 import ThemedText from '../components/ThemedText';
-import ThemedCard from '../components/ThemedCard';
 import IonIcons from '../components/IonIcons';
 import ThemedSearchBar from '../components/ThemedSearchBar';
 
 type SingleItemProps = NativeStackScreenProps<RootStackParamList, 'SingleItem'>;
-
-const data: Address =
-    { name: 'alice', apartment: '93 avenue', street: 'kalubai mandir, ramtekdi', city: 'hadapsar', state: 'Maharashtra', pinCode: 12, phoneNo: 12 }
 
 const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
     const colorScheme: string = useAppTheme()
@@ -111,11 +107,6 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
                     <Spacer height={20} />
                     <ThemedText style={[styles.title, { color: theme.title }]}>Delivery Details</ThemedText>
                     <Spacer height={10} />
-
-                    <ThemedCard style={{ flexDirection: 'row', paddingVertical: 10 }}>
-                        <ThemedText numberOfLines={1}>{data.apartment}, {data.street}, {data.city}, {data.state}, {data.pinCode}</ThemedText>
-                        <IonIcons name="chevron-forward" style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={20} />
-                    </ThemedCard>
                 </View>
             </Animated.ScrollView>
 

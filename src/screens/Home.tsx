@@ -43,7 +43,7 @@ const Home = () => {
     return (
         <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
             <ThemedView style={styles.header}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 75 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Logo />
                     <Pressable style={{ width: '25%', marginRight: 10 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
