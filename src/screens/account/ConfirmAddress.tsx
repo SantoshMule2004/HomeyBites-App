@@ -1,19 +1,20 @@
+import React, { useState } from 'react'
 import { Alert, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { Colors } from '../../constants/Colors'
 import { RootStackParamList } from '../../navigation/AppNavigator'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useUserStore } from '../../stores/useUserStore'
+import { useMutation } from '@tanstack/react-query'
+import { addAddress } from '../../services/UserService'
 
-import React, { useState } from 'react'
 import ThemedView from '../../components/ThemedView'
 import IonIcons from '../../components/IonIcons'
 import ThemedButton from '../../components/ThemedButton'
 import ThemedText from '../../components/ThemedText'
 import ThemedTextInput from '../../components/ThemedTextInput'
+import CustomRadioButton from '../../components/CustomRadioButton'
 import Spacer from '../../components/Spacer'
-import { useUserStore } from '../../stores/useUserStore'
-import { useMutation } from '@tanstack/react-query'
-import { addAddress } from '../../services/UserService'
 import axios from 'axios'
 
 type ConfirmAddressProps = NativeStackScreenProps<RootStackParamList, 'ConfirmAddress'>;
@@ -31,6 +32,14 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
     const [contactNo, setContactNo] = useState(pNo)
     const [addLine, setAddline] = useState("")
     const [street, setStreet] = useState("")
+    const [addressType, setAddressType] = useState("home")
+    const [addressName, setAddressname] = useState("")
+
+    const options = [
+        { label: 'Home', value: 'home' },
+        { label: 'Office', value: 'office' },
+        { label: 'Other', value: 'other' },
+    ]
 
     const onSubmit = () => {
         if (!fullName.trim() || !contactNo.trim() || !addLine.trim()) {
@@ -50,7 +59,9 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
                             latitude: route.params.address.lat,
                             longitude: route.params.address.lon,
                             receiverContactNo: contactNo,
-                            receiverName: fullName
+                            receiverName: fullName,
+                            addressName,
+                            addressType
                         }
                     })
                 }
@@ -113,6 +124,9 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
                 <ThemedText style={{ fontWeight: '500' }}>Location Details</ThemedText>
                 <Spacer height={10} />
                 <View style={{ backgroundColor: theme.uiBackground, borderRadius: 10, padding: 10 }}>
+
+                    <CustomRadioButton options={options} selectedValue={addressType} onSelect={(type: string) => setAddressType(type)} />
+
                     <ThemedText style={{ fontSize: 12, fontWeight: '500' }}>Flat, house no, Building, Company, Apartment*</ThemedText>
                     <ThemedTextInput
                         // placeholder="Flat, house no, Building, Company, Apartment"
@@ -129,17 +143,28 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
                         onChangeText={setStreet}
                         style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
 
+                    <Spacer height={5} />
+
                     <ThemedText style={{ fontSize: 12, fontWeight: '500' }}>Area/locality*</ThemedText>
                     <ThemedTextInput
                         value={route.params.address.display_name}
                         editable={false}
                         multiline={true}
                         style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
+
+                    <Spacer height={5} />
+
+                    <ThemedText style={{ fontSize: 12, fontWeight: '500' }}>Address name</ThemedText>
+                    <ThemedTextInput
+                        // placeholder="street"
+                        value={addressName}
+                        onChangeText={setAddressname}
+                        style={[styles.textInput, { borderBottomColor: theme.borderBottom }]} />
                 </View>
             </View>
 
-            <ThemedButton style={{ margin: 10 }} onPress={onSubmit}>
-                <ThemedText btnText={true} style={styles.btnText}>Add new Address</ThemedText>
+            <ThemedButton style={{ margin: 10 }} disabled={addAddressMutation.isPending} onPress={onSubmit}>
+                <ThemedText btnText={true} style={styles.btnText}>{addAddressMutation.isPending ? "Loading..." : "Add new Address"}</ThemedText>
             </ThemedButton>
         </ThemedView>
     )

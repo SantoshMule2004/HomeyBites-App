@@ -1,14 +1,13 @@
-import { ActivityIndicator, StyleSheet, useColorScheme } from 'react-native'
+import { ActivityIndicator, StyleSheet } from 'react-native'
+import { Colors } from '../constants/Colors'
+
 import React from 'react'
 import ThemedView from './ThemedView'
-import { useAppTheme } from '../stores/useAppTheme'
 
-const LoadingContainer = () => {
-    const colorScheme = useAppTheme()
-    const color = colorScheme === 'dark' ? '#fff' : '#333'
+const LoadingContainer = ({ style = {} }) => {
     return (
-        <ThemedView style={styles.loadingContainer}>
-            <ActivityIndicator size='large' color={color} />
+        <ThemedView style={[styles.loadingContainer, style]}>
+            <ActivityIndicator size='large' color={Colors.primary} />
         </ThemedView>
     )
 }
@@ -18,8 +17,9 @@ export default LoadingContainer
 const styles = StyleSheet.create({
     loadingContainer: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        marginTop: 100,
         backgroundColor: 'transparent'
     },
 })

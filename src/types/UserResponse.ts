@@ -26,6 +26,16 @@ export interface UserInfo {
     serviceRadius: string;
 }
 
+export interface UpdateDetailsDto {
+    firstName: string;
+    lastName: string;
+}
+
+export interface UpdateEmailDto {
+    userId: number,
+    email: string
+}
+
 export interface PasswordDto {
     oldPassword: string;
     newPassword: string;
@@ -39,11 +49,8 @@ export interface AddressRequest {
     longitude: string;
     receiverName: string;
     receiverContactNo: string;
-}
-
-export interface AddressPayload {
-    userId: number
-    addressRequest: AddressRequest
+    addressType: string;
+    addressName: string;
 }
 
 export interface Address {
@@ -54,6 +61,8 @@ export interface Address {
     longitude: string;
     receiverName: string;
     receiverContactNo: string;
+    addressType: string;
+    addressName: string;
 }
 
 export interface CartItem {

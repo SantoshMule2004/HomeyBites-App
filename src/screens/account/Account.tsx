@@ -25,6 +25,7 @@ const Account = () => {
   const logoutUser = useUserStore((state) => state.logout)
   const firstName = useUserStore((state) => state.firstName)
   const lastName = useUserStore((state) => state.lastName)
+  const emailId = useUserStore((state) => state.emailId)
 
   const logout = () => {
     Alert.alert("Logout", "Are you sure, you want to logout?",
@@ -55,7 +56,10 @@ const Account = () => {
       <View style={[styles.profle, { justifyContent: isLoggedIn ? 'space-between' : 'flex-end', backgroundColor: theme.uiBackground }]}>
         {isLoggedIn ?
           <>
-            <ThemedText style={styles.text}>{firstName} {lastName}</ThemedText>
+            <View>
+              <ThemedText style={styles.text}>{firstName} {lastName}</ThemedText>
+              <ThemedText>{emailId}</ThemedText>
+            </View>
             <TouchableOpacity onPress={logout}>
               <Text style={{ color: Colors.warnning, fontWeight: 'bold', fontSize: 15, textAlign: 'center' }}>Logout</Text>
             </TouchableOpacity>
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
     marginVertical: 5
   },
   text: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '600',
   }
 })

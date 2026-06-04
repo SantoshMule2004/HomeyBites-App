@@ -1,3 +1,5 @@
 export const mmkvKey = {
-    PUBLIC_URL: "https://homeybites.onrender.com",
+    PUBLIC_URL: "https://subterritorial-renay-unglamorously.ngrok-free.dev",
+
+    // https://homeybites.onrender.com
 }

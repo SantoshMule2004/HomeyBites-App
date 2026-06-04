@@ -17,7 +17,7 @@ export type RootStackParamList = {
     Login: undefined;
     Register: undefined;
     Search: undefined;
-    SingleItem: { itemId: string };
+    SingleItem: { itemId: string, userLat: number, userLng: number };
     AddAddress: undefined;
     ConfirmAddress: { address: Add };
 };

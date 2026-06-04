@@ -1,14 +1,15 @@
 import { StyleSheet, View } from 'react-native'
 import { cart } from '../types/Type'
+import { useAppTheme } from '../stores/useAppTheme'
+import { Colors } from '../constants/Colors'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import React from 'react'
 import ThemedView from '../components/ThemedView'
 import ThemedText from '../components/ThemedText'
 import ThemedButton from '../components/ThemedButton'
 import CartItem from '../components/CartItem'
-import { useAppTheme } from '../stores/useAppTheme'
-import { Colors } from '../constants/Colors'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
 
 const Cart = () => {
   const colorScheme: string = useAppTheme()

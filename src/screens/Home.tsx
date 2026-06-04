@@ -1,20 +1,20 @@
+import React, { useEffect } from 'react'
 import { Alert, Image, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { navigationProp } from '../navigation/AppNavigator'
 import { useNavigation } from '@react-navigation/native'
 import { rawData } from '../types/Type'
+import { useCurrentLocation } from '../hooks/useCurrentLocation'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import React, { useEffect } from 'react'
 import ThemedView from '../components/ThemedView'
 import ThemedSearchBar from '../components/ThemedSearchBar'
 import CustomCarousel from '../components/CustomCarousel'
 import MenuItemList from '../components/MenuItemList'
 import Heading from '../components/Heading'
 import Spacer from '../components/Spacer'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Logo from '../components/Logo'
 import ThemedText from '../components/ThemedText'
 import IonIcons from '../components/IonIcons'
-import { useCurrentLocation } from '../hooks/useCurrentLocation'
 
 const data = [
     { id: '1', title: 'Ghar Ka Khana', subTitle: '"The Taste of Home, Wherever You Are!"', url: require('../assets/header1.jpeg') },
@@ -37,7 +37,7 @@ const Home = () => {
     }
 
     const onItemClicked = (id: string) => {
-        navigation.navigate('SingleItem', { itemId: id })
+        navigation.navigate('SingleItem', { itemId: id, userLat: coords?.lat!, userLng: coords?.lon! })
     }
 
     return (
@@ -45,13 +45,15 @@ const Home = () => {
             <ThemedView style={styles.header}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Logo />
-                    <Pressable style={{ width: '25%', marginRight: 10 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                            <IonIcons name="chevron-down" style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={18} />
-                            <ThemedText numberOfLines={1} style={{ flexShrink: 1 }}>{displayAdd}</ThemedText>
-                        </View>
-                        <ThemedText numberOfLines={1} style={{ flexShrink: 1, fontSize: 12 }}>{address}</ThemedText>
-                    </Pressable>
+                    {!loading &&
+                        <Pressable style={{ width: '25%', marginRight: 10 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                <IonIcons name="chevron-down" style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={18} />
+                                <ThemedText numberOfLines={1} style={{ flexShrink: 1 }}>{displayAdd}</ThemedText>
+                            </View>
+                            <ThemedText numberOfLines={1} style={{ flexShrink: 1, fontSize: 12 }}>{address}</ThemedText>
+                        </Pressable>
+                    }
                 </View>
 
                 <Pressable onPress={() => navigation.navigate('Search')} >

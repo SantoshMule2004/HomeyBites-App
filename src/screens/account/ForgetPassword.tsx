@@ -1,12 +1,13 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { Colors } from '../../constants/Colors'
 import { useMutation } from '@tanstack/react-query'
-import { resetPassword } from '../../services/UserService'
+import { resetPasswordAfterForget, sendOtp } from '../../services/UserService'
 import { useNavigation } from '@react-navigation/native'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 import { useUserStore } from '../../stores/useUserStore'
+import { verifyOtpOnServer } from '../../services/AuthService'
 
 import ThemedView from '../../components/ThemedView'
 import Spacer from '../../components/Spacer'
@@ -28,16 +29,14 @@ const ForgetPassword = () => {
     const [otp, setOtp] = useState("")
     const [emailId, setEmaiId] = useState(emailAddress)
 
-    const [oldPassword, setOldPassword] = useState<string>("")
     const [newPassword, setNewPassword] = useState<string>("")
     const [cPassword, setcPassword] = useState<string>("")
 
-    const [isOldPasswordVisible, setisOldPasswordVisible] = useState(false)
     const [isPasswordVisible, setisPasswordVisible] = useState(false)
     const [isCPasswordVisible, setisCPasswordVisible] = useState(false)
 
     const resetPasswordMutation = useMutation({
-        mutationFn: resetPassword,
+        mutationFn: resetPasswordAfterForget,
         onSuccess: async (data) => {
             console.log(data.message)
 
@@ -56,12 +55,44 @@ const ForgetPassword = () => {
         }
     })
 
-    const onSubmit = () => {
-        if (!oldPassword?.trim()) {
-            Alert.alert("Please enter old password")
-            return
+    // api call for sending otp to verify email
+    const sendOtpMutation = useMutation({
+        mutationFn: sendOtp,
+        onSuccess: async (data) => {
+            console.log(data.message)
+            setIsOtpSent(true)
+            Alert.alert(data.message)
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                const backendMessage = error.response?.data?.message;
+                console.log("Backend Message:", backendMessage);
+                Alert.alert(backendMessage)
+            } else {
+                console.log("Generic Error:", error.message);
+            }
         }
+    })
 
+    // api call for otp verification
+    const verifyOtpMutation = useMutation({
+        mutationFn: verifyOtpOnServer,
+        onSuccess: async (data) => {
+            console.log(data.message)
+            setIsVerified(true)
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                const backendMessage = error.response?.data?.message;
+                console.log("Backend Message:", backendMessage);
+                Alert.alert(backendMessage)
+            } else {
+                console.log("Generic Error:", error.message);
+            }
+        }
+    })
+
+    const onSubmit = () => {
         if (!newPassword?.trim()) {
             Alert.alert("Please enter new password")
             return
@@ -72,7 +103,26 @@ const ForgetPassword = () => {
             return
         }
 
-        resetPasswordMutation.mutate({ oldPassword, newPassword, cPassword })
+        resetPasswordMutation.mutate({ emailId, passwordData: { oldPassword: '', newPassword, cPassword } })
+    }
+
+    const onSendOtp = () => {
+        if (!emailId?.trim()) {
+            Alert.alert("Please enter email address")
+            return
+        }
+
+        // setIsOtpSent(true)
+        sendOtpMutation.mutate(emailId)
+    }
+
+    const onVerifyOtp = () => {
+        if (!otp?.trim()) {
+            Alert.alert("Please enter the OTP")
+            return
+        }
+        // setIsVerified(true)
+        verifyOtpMutation.mutate({ emailId, otp })
     }
 
     return (
@@ -93,25 +143,14 @@ const ForgetPassword = () => {
 
                             <Spacer height={20} />
 
-                            <Pressable disabled={resetPasswordMutation.isPending} style={styles.updateBtn} onPress={onSubmit}>
+                            <Pressable disabled={resetPasswordMutation.isPending} style={styles.updateBtn} onPress={onVerifyOtp}>
                                 <ThemedText style={{ textAlign: 'center', fontWeight: '700', color: theme.iconColorFocused }}>
-                                    {resetPasswordMutation.isPending ? "Loading..." : "Verify OTP"}
+                                    {verifyOtpMutation.isPending ? "Loading..." : "Verify OTP"}
                                 </ThemedText>
                             </Pressable>
                         </>
                         :
                         <>
-                            <SecureTextInput
-                                value={oldPassword}
-                                style={styles.textInput}
-                                setValue={setOldPassword}
-                                onClicked={() => setisOldPasswordVisible(!isOldPasswordVisible)}
-                                placeholder="enter old password"
-                                secureTextEntry={!isOldPasswordVisible}
-                                iconName={isOldPasswordVisible ? "eye" : "eye-off"} />
-
-                            <Spacer height={10} />
-
                             <SecureTextInput
                                 value={newPassword}
                                 style={styles.textInput}
@@ -142,6 +181,9 @@ const ForgetPassword = () => {
                         </>
                         :
                         <>
+                            <ThemedText style={{ fontWeight: '700' }}>Email address</ThemedText>
+                            <Spacer height={10} />
+
                             <ThemedTextInput
                                 value={emailId}
                                 onChangeText={setEmaiId}
@@ -149,9 +191,9 @@ const ForgetPassword = () => {
 
                             <Spacer height={20} />
 
-                            <Pressable disabled={resetPasswordMutation.isPending} style={styles.updateBtn} onPress={onSubmit}>
+                            <Pressable disabled={resetPasswordMutation.isPending} style={styles.updateBtn} onPress={onSendOtp}>
                                 <ThemedText style={{ textAlign: 'center', fontWeight: '700', color: theme.iconColorFocused }}>
-                                    {resetPasswordMutation.isPending ? "Loading..." : "Send OTP"}
+                                    {sendOtpMutation.isPending ? "Loading..." : "Send OTP"}
                                 </ThemedText>
                             </Pressable>
                         </>

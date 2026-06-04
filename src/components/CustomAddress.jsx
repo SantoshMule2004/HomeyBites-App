@@ -1,9 +1,11 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, StyleSheet, View } from 'react-native'
+import { useAppTheme } from '../stores/useAppTheme';
+import { Colors } from '../constants/Colors';
+
 import React from 'react'
 import ThemedText from './ThemedText';
 import ThemedCard from './ThemedCard';
-import { useAppTheme } from '../stores/useAppTheme';
-import { Colors } from '../constants/Colors';
+import Spacer from './Spacer';
 
 const CustomAddress = ({ data, onEditPressed, onRemovedPressed, refreshControl = {} }) => {
   const colorScheme = useAppTheme()
@@ -12,6 +14,7 @@ const CustomAddress = ({ data, onEditPressed, onRemovedPressed, refreshControl =
   const renderItem = ({ item }) => {
     return (
       <ThemedCard style={styles.addressContainer}>
+        <ThemedText style={{ fontWeight: 'bold' }}>{item.addressName || item.addressType}</ThemedText>
         <ThemedText style={{ fontWeight: 'bold' }}>{item.receiverName}</ThemedText>
         <ThemedText>{item.addressLine}, {item.area}</ThemedText>
         <ThemedText>Phone Number: {item.receiverContactNo}</ThemedText>
@@ -46,6 +49,7 @@ const CustomAddress = ({ data, onEditPressed, onRemovedPressed, refreshControl =
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={EmptyMenu}
+      ItemSeparatorComponent={<Spacer height={5} />}
       refreshControl={refreshControl} />
   )
 }
@@ -55,7 +59,6 @@ export default CustomAddress
 const styles = StyleSheet.create({
   addressContainer: {
     marginTop: 5, marginHorizontal: 10, borderRadius: 10, elevation: 5,
-    gap: 5
   },
   btn: {
     flexDirection: 'row',

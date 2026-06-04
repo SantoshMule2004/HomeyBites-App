@@ -1,6 +1,5 @@
 import { ApiResponse } from "../types/RegisterUserRequest"
-import { LocationIQAutocompleteResult } from "../types/Type"
-import { Address, AddressPayload, AddressRequest, PasswordDto, UserInfo } from "../types/UserResponse"
+import { Address, AddressRequest, PasswordDto, UpdateDetailsDto, UpdateEmailDto, UserInfo } from "../types/UserResponse"
 import { PrivateApiClient, PublicApiClient } from "./apiClient"
 
 export const getCurrentUser = async () => {
@@ -13,13 +12,23 @@ export const updateUser = async (userId: number, data: UserInfo) => {
     return response.data
 }
 
+export const updateUserDetails = async (data: { userId: number, updateDetailsDto: UpdateDetailsDto }) => {
+    const response = await PrivateApiClient.put<ApiResponse<null>>(`/api/v1/users/${data.userId}/user-details`, data.updateDetailsDto)
+    return response.data
+}
+
+export const updateUserEmail = async (data: UpdateEmailDto) => {
+    const response = await PrivateApiClient.put<ApiResponse<null>>(`/api/v1/users/${data.userId}/email`, { "email": data.email })
+    return response.data
+}
+
 export const sendOtp = async (emailId: string) => {
     const response = await PublicApiClient.post<ApiResponse<null>>(`/api/v1/auth/update/send-otp?username=${emailId}`)
     return response.data
 }
 
-export const resetPasswordBeforeLogin = async (emailId: string, passwordData: PasswordDto) => {
-    const response = await PublicApiClient.post<ApiResponse<null>>(`/api/v1/auth/update/reset-pass?emailId=${emailId}`, passwordData)
+export const resetPasswordAfterForget = async (data: { emailId: string, passwordData: PasswordDto }) => {
+    const response = await PublicApiClient.post<ApiResponse<null>>(`/api/v1/auth/reset-pass?emailId=${data.emailId}`, data.passwordData)
     return response.data
 }
 
@@ -29,7 +38,7 @@ export const resetPassword = async (passwordData: PasswordDto) => {
 }
 
 // user address related API calls
-export const addAddress = async (data: AddressPayload) => {
+export const addAddress = async (data: { userId: number, addressRequest: AddressRequest }) => {
     const response = await PrivateApiClient.post<ApiResponse<Address>>(`/api/v1/user/${data.userId}/address`, data.addressRequest)
     return response.data
 }

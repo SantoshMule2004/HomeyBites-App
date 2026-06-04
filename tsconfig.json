@@ -2,6 +2,6 @@
   "compilerOptions": {
     "types": ["jest"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "src/stores/useUserPrefStore.js", "src/components/CustomCarousel.jsx", "src/components/SectionList.jsx", "src/components/SecureTextInput.jsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/stores/useUserPrefStore.js", "src/components/CustomCarousel.jsx", "src/components/SectionList.jsx", "src/components/SecureTextInput.jsx", "src/components/CustomRadioButton.tjsx"],
   "exclude": ["**/node_modules", "**/Pods"]
 }

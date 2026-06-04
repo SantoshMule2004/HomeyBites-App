@@ -9,6 +9,7 @@ import { useDebounce } from '../../hooks/useDebounce'
 import { LocationIQAutocompleteResult } from '../../types/Type'
 import { navigationProp } from '../../navigation/AppNavigator'
 import { autocomplete } from '../../services/LocationIQService'
+import { useCurrentLocation } from '../../hooks/useCurrentLocation'
 
 import ThemedView from '../../components/ThemedView'
 import ThemedSearchBar from '../../components/ThemedSearchBar'
@@ -17,7 +18,6 @@ import ThemedCard from '../../components/ThemedCard'
 import ThemedText from '../../components/ThemedText'
 import ThemedButton from '../../components/ThemedButton'
 import Spacer from '../../components/Spacer'
-import { useCurrentLocation } from '../../hooks/useCurrentLocation'
 
 
 const AddNewAddress = () => {
@@ -45,6 +45,9 @@ const AddNewAddress = () => {
             return
         }
 
+        if(loading) {
+            return
+        }
         appNavigation.navigate('ConfirmAddress', {
             address: {
                 display_name: data?.display_name! ? data?.display_name! : fullAddress!,

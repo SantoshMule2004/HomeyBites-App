@@ -3,10 +3,13 @@ import React, { useState } from 'react'
 import { useAppTheme } from '../stores/useAppTheme'
 import { Colors } from '../constants/Colors'
 import AppThemeDropdown from '../components/AppThemeDropdown'
+import { useUserStore } from '../stores/useUserStore'
 
 const SectionItemList = ({ onClicked }) => {
     const colorScheme = useAppTheme()
     const theme = Colors[colorScheme] ?? Colors.light
+
+    const isLoggedIn = useUserStore((state) => state.isLoggedIn)
 
     const [toggles, setToggles] = useState({
         bluetoothEnabled: false,
@@ -19,12 +22,14 @@ const SectionItemList = ({ onClicked }) => {
     const SETTINGS_DATA = [
         {
             title: 'Account settings',
-            data: [
+            data: isLoggedIn ? [
                 { id: 'AppTheme', title: 'App Theme', type: 'dropdown', stateKey: 'darkModeEnabled' },
                 { id: 'EditProfile', title: 'Edit Profile', type: 'link', subtitle: '' },
                 { id: 'SavedAddresses', title: 'Saved Addresses', type: 'link', subtitle: '' },
                 { id: 'ForgetPassword', title: 'Forget Password?', type: 'link', subtitle: '' },
                 { id: 'ResetPassword', title: 'Reset Password', type: 'link', subtitle: '' },
+            ] : [
+                { id: 'AppTheme', title: 'App Theme', type: 'dropdown', stateKey: 'darkModeEnabled' },
             ],
         },
     ];

@@ -15,7 +15,9 @@ interface UserState {
     isLoggedIn: boolean,
     authToken: string,
     login: (userId: number, firstName: string, lastName: string, emailId: string, phoneNo: string, dob: string, gender: string, dietryPref: string, userRole: string, authToken: string) => void,
-    logout: () => void
+    logout: () => void,
+    updateUserDetails: (firstName: string, lastName: string) => void,
+    updateUserEmail: (emailId: string) => void,
 }
 
 export const useUserStore = create<UserState>()(persist(
@@ -47,7 +49,13 @@ export const useUserStore = create<UserState>()(persist(
             userRole: '',
             authToken: '',
             isLoggedIn: false,
-        })
+        }),
+        updateUserDetails: (firstName, lastName) => {
+            set({ firstName: firstName, lastName: lastName })
+        },
+        updateUserEmail: (emailId) => {
+            set({ emailId })
+        }
     }),
     {
         name: 'user-storage',

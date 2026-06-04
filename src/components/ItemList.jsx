@@ -1,7 +1,8 @@
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
 import { useAppTheme } from '../stores/useAppTheme'
 import { Colors } from '../constants/Colors'
+
+import React from 'react'
 import ThemedText from './ThemedText'
 
 const ItemList = ({ data, onItemClicked }) => {
@@ -9,19 +10,19 @@ const ItemList = ({ data, onItemClicked }) => {
     const theme = Colors[colorScheme] ?? Colors.light
 
     const renderItem = ({ item }) => (
-        <Pressable onPress={() => onItemClicked(item.id)}>
+        <Pressable onPress={() => onItemClicked(item.menuId)}>
             <View style={styles.itemContainer}>
                 <Image
                     style={styles.cardImage}
                     source={{
-                        uri: item.url
+                        uri: item.imageUrl
                     }}
                     resizeMode='center' />
 
                 <View style={styles.cardDesc}>
-                    <Text style={[styles.title, { color: theme.title }]}>{item.title}</Text>
-                    <Text style={[styles.text, { color: theme.text }]}>{item.desc}</Text>
-                    <Text style={[styles.text, { color: theme.text }]}>{item.price}</Text>
+                    <Text style={[styles.title, { color: theme.title }]}>{item.menuName}</Text>
+                    <Text style={[styles.text, { color: theme.text }]}>{item.description}</Text>
+                    <Text style={[styles.text, { color: theme.text }]}>₹{item.price}</Text>
                 </View>
             </View>
         </Pressable>
@@ -41,7 +42,7 @@ const ItemList = ({ data, onItemClicked }) => {
         <View style={styles.container}>
             <FlatList
                 data={data}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.menuId}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={Divider}
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         width: '100%',
         flexDirection: 'row',
-        minHeight: 200,
+        minHeight: 150,
         marginBottom: 10,
         padding: 10
     },

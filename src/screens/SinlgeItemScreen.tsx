@@ -2,10 +2,11 @@ import { Alert, Animated, Image, StyleSheet, Text, TouchableOpacity, View } from
 import React, { useRef, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { rawData } from '../types/Type';
 import { useAppTheme } from '../stores/useAppTheme';
 import { Colors } from '../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuery } from '@tanstack/react-query';
+import { getMenuitemById } from '../services/MenuService';
 
 import ThemedView from '../components/ThemedView'
 import Spacer from '../components/Spacer';
@@ -13,6 +14,7 @@ import ThemedButton from '../components/ThemedButton';
 import ThemedText from '../components/ThemedText';
 import IonIcons from '../components/IonIcons';
 import ThemedSearchBar from '../components/ThemedSearchBar';
+import LoadingContainer from '../components/LoadingContainer';
 
 type SingleItemProps = NativeStackScreenProps<RootStackParamList, 'SingleItem'>;
 
@@ -30,11 +32,18 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
 
     const id = route.params.itemId
 
-    const item = rawData.filter((item) => item.id === id)
+    // const item = rawData.filter((item) => item.id === id)
 
     const onSearch = (query: string) => {
         Alert.alert("onSearch")
     }
+
+    const { data, isPending, isFetching, error, refetch, } = useQuery({
+        queryKey: ['menuitem-single', id],
+        queryFn: () => getMenuitemById({ menuId: Number(id), userLat: route.params.userLat, userLng: route.params.userLng }),
+        enabled: true,
+        // staleTime: 1000 * 60 * 5,
+    });
 
     const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -79,36 +88,37 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
                 </TouchableOpacity>
             </Animated.View>
 
-            <Animated.ScrollView
-                style={[styles.itemContainer]}
-                contentContainerStyle={{ paddingTop: HEADER_HEIGHT - 20 }}
-                onScroll={
-                    onScroll
-                    //     Animated.event(
-                    //     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                    //     { useNativeDriver: true }
-                    // )
-                }
-                scrollEventThrottle={16}
-                showsVerticalScrollIndicator={false}>
-                <Image
-                    style={styles.cardImage}
-                    source={{
-                        uri: item.at(0)?.url
-                    }}
-                    resizeMode='cover' />
+            {isPending ? <LoadingContainer style={{ justifyContent: 'center', aliginItems: 'center' }} /> :
+                <Animated.ScrollView
+                    style={[styles.itemContainer]}
+                    contentContainerStyle={{ paddingTop: HEADER_HEIGHT - 20 }}
+                    onScroll={
+                        onScroll
+                        //     Animated.event(
+                        //     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                        //     { useNativeDriver: true }
+                        // )
+                    }
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}>
+                    <Image
+                        style={styles.cardImage}
+                        source={{
+                            uri: data?.imageUrl
+                        }}
+                        resizeMode='cover' />
 
-                <View style={styles.itemDesc}>
-                    <ThemedText style={[styles.title, { color: theme.title }]}>{item.at(0)?.title}</ThemedText>
-                    <Spacer height={10} />
-                    <ThemedText style={[styles.text, { color: theme.text }]}>{item.at(0)?.desc}</ThemedText>
-                    <Spacer height={10} />
-                    <ThemedText style={[styles.text, { color: theme.text, fontWeight: '700' }]}>{item.at(0)?.price}</ThemedText>
-                    <Spacer height={20} />
-                    <ThemedText style={[styles.title, { color: theme.title }]}>Delivery Details</ThemedText>
-                    <Spacer height={10} />
-                </View>
-            </Animated.ScrollView>
+                    <View style={styles.itemDesc}>
+                        <ThemedText style={[styles.title, { color: theme.title }]}>{data?.menuName}</ThemedText>
+                        <Spacer height={10} />
+                        <ThemedText style={[styles.text, { color: theme.text }]}>{data?.description}</ThemedText>
+                        <Spacer height={10} />
+                        <ThemedText style={[styles.text, { color: theme.text, fontWeight: '700' }]}>{data?.price}</ThemedText>
+                        <Spacer height={20} />
+                        <ThemedText style={[styles.title, { color: theme.title }]}>Delivery Details</ThemedText>
+                        <Spacer height={10} />
+                    </View>
+                </Animated.ScrollView>}
 
             <View style={styles.btns}>
                 <ThemedButton style={{ flex: 1, borderRadius: 20, backgroundColor: '#eee' }} onPress={() => setCartItemCount(2)}>
