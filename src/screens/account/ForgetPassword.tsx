@@ -15,6 +15,7 @@ import ThemedText from '../../components/ThemedText'
 import SecureTextInput from '../../components/SecureTextInput'
 import axios from 'axios'
 import ThemedTextInput from '../../components/ThemedTextInput'
+import ShowToast from '../../components/ShowToast'
 
 const ForgetPassword = () => {
     const colorScheme: string = useAppTheme()
@@ -40,7 +41,8 @@ const ForgetPassword = () => {
         onSuccess: async (data) => {
             console.log(data.message)
 
-            Alert.alert(data.message)
+            // Alert.alert(data.message)
+            ShowToast({ text: data.message })
 
             navigation.navigate('AccountInfo')
         },
@@ -48,7 +50,8 @@ const ForgetPassword = () => {
             if (axios.isAxiosError(error)) {
                 const backendMessage = error.response?.data?.message;
                 console.log("Backend Message:", backendMessage);
-                Alert.alert(backendMessage)
+                // Alert.alert(backendMessage)
+                ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
             } else {
                 console.log("Generic Error:", error.message);
             }
@@ -61,13 +64,15 @@ const ForgetPassword = () => {
         onSuccess: async (data) => {
             console.log(data.message)
             setIsOtpSent(true)
-            Alert.alert(data.message)
+            // Alert.alert(data.message)
+            ShowToast({ text: data.message })
         },
         onError: (error) => {
             if (axios.isAxiosError(error)) {
                 const backendMessage = error.response?.data?.message;
                 console.log("Backend Message:", backendMessage);
-                Alert.alert(backendMessage)
+                // Alert.alert(backendMessage)
+                ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
             } else {
                 console.log("Generic Error:", error.message);
             }
@@ -80,12 +85,14 @@ const ForgetPassword = () => {
         onSuccess: async (data) => {
             console.log(data.message)
             setIsVerified(true)
+            ShowToast({ text: data.message })
         },
         onError: (error) => {
             if (axios.isAxiosError(error)) {
                 const backendMessage = error.response?.data?.message;
                 console.log("Backend Message:", backendMessage);
-                Alert.alert(backendMessage)
+                // Alert.alert(backendMessage)
+                ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
             } else {
                 console.log("Generic Error:", error.message);
             }
@@ -95,11 +102,13 @@ const ForgetPassword = () => {
     const onSubmit = () => {
         if (!newPassword?.trim()) {
             Alert.alert("Please enter new password")
+            ShowToast({ text: "Please enter new password", success: false, position: 'top', topOffset: 30 })
             return
         }
 
         if (!cPassword?.trim()) {
             Alert.alert("Please confirm password")
+            ShowToast({ text: "Please confirm password", success: false, position: 'top', topOffset: 30 })
             return
         }
 
@@ -109,6 +118,7 @@ const ForgetPassword = () => {
     const onSendOtp = () => {
         if (!emailId?.trim()) {
             Alert.alert("Please enter email address")
+            ShowToast({ text: "Please enter email address", success: false, position: 'top', topOffset: 30 })
             return
         }
 
@@ -119,6 +129,7 @@ const ForgetPassword = () => {
     const onVerifyOtp = () => {
         if (!otp?.trim()) {
             Alert.alert("Please enter the OTP")
+            ShowToast({ text: "Please enter the OTP", success: false, position: 'top', topOffset: 30 })
             return
         }
         // setIsVerified(true)

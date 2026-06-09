@@ -13,6 +13,7 @@ import ThemedButton from '../components/ThemedButton'
 import CartItem from '../components/CartItem'
 import LoadingContainer from '../components/LoadingContainer'
 import axios from 'axios'
+import ShowToast from '../components/ShowToast'
 
 const Cart = () => {
   const colorScheme: string = useAppTheme()
@@ -32,14 +33,17 @@ const Cart = () => {
   const updateQuantityMutation = useMutation({
     mutationFn: updateCartItem,
     onSuccess: async (data) => {
-      Alert.alert(data.message)
-       refetch()
+      // Alert.alert(data.message)
+      ShowToast({ text: data.message })
+      refetch()
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false })
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -49,14 +53,16 @@ const Cart = () => {
   const removeItemMutation = useMutation({
     mutationFn: deleteCartItem,
     onSuccess: async (data) => {
-      Alert.alert(data.message)
+      // Alert.alert(data.message)
+      ShowToast({ text: data.message })
       refetch()
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }

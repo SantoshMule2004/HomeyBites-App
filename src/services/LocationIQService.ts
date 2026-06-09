@@ -1,4 +1,4 @@
-import { LocationIQAutocompleteResult, LocationIQReverseResult } from "../types/Type"
+import { LocationIQAutocompleteResult, LocationIQReverseResult } from "../types/LocationType"
 import { PrivateApiClient, PublicApiClient } from "./apiClient"
 
 export const autocomplete = async (query: string) => {

@@ -8,7 +8,7 @@ import BottomNavigator, { BottomParamList } from './BottomNavigator';
 import SearchScreen from '../screens/SearchScreen';
 import SinlgeItemScreen from '../screens/SinlgeItemScreen';
 import AddNewAddress from '../screens/account/AddNewAddress';
-import { Add } from '../types/Type';
+import { Add } from '../types/LocationType';
 import ConfirmAddress from '../screens/account/ConfirmAddress';
 
 

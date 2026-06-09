@@ -1,4 +1,4 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { Colors } from '../../constants/Colors'
@@ -13,6 +13,7 @@ import ThemedText from '../../components/ThemedText'
 import SecureTextInput from '../../components/SecureTextInput'
 
 import axios from 'axios'
+import ShowToast from '../../components/ShowToast'
 
 const ResetPassword = () => {
     const colorScheme: string = useAppTheme()
@@ -33,7 +34,8 @@ const ResetPassword = () => {
         onSuccess: async (data) => {
             console.log(data.message)
 
-            Alert.alert(data.message)
+            // Alert.alert(data.message)
+            ShowToast({ text: data.message })
 
             navigation.navigate('AccountInfo')
         },
@@ -41,7 +43,8 @@ const ResetPassword = () => {
             if (axios.isAxiosError(error)) {
                 const backendMessage = error.response?.data?.message;
                 console.log("Backend Message:", backendMessage);
-                Alert.alert(backendMessage)
+                // Alert.alert(backendMessage)
+                ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
             } else {
                 console.log("Generic Error:", error.message);
             }
@@ -50,17 +53,20 @@ const ResetPassword = () => {
 
     const onSubmit = () => {
         if (!oldPassword?.trim()) {
-            Alert.alert("Please enter old password")
+            // Alert.alert("Please enter old password")
+            ShowToast({ text: "Please enter old password", success: false, position: 'top', topOffset: 30 })
             return
         }
 
         if (!newPassword?.trim()) {
-            Alert.alert("Please enter new password")
+            // Alert.alert("Please enter new password")
+            ShowToast({ text: "Please enter new password", success: false, position: 'top', topOffset: 30 })
             return
         }
 
         if (!cPassword?.trim()) {
-            Alert.alert("Please confirm password")
+            // Alert.alert("Please confirm password")
+            ShowToast({ text: "Please confirm password", success: false, position: 'top', topOffset: 30 })
             return
         }
 

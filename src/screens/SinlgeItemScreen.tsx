@@ -1,5 +1,5 @@
 import { Alert, Animated, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useAppTheme } from '../stores/useAppTheme';
@@ -7,6 +7,8 @@ import { Colors } from '../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getMenuitemById } from '../services/MenuService';
+import { useUserStore } from '../stores/useUserStore';
+import { addItemToCart, getCartItemsCount } from '../services/CartService';
 
 import ThemedView from '../components/ThemedView'
 import Spacer from '../components/Spacer';
@@ -15,9 +17,8 @@ import ThemedText from '../components/ThemedText';
 import IonIcons from '../components/IonIcons';
 import ThemedSearchBar from '../components/ThemedSearchBar';
 import LoadingContainer from '../components/LoadingContainer';
-import { useUserStore } from '../stores/useUserStore';
-import { addItemToCart, getCartItemsCount } from '../services/CartService';
 import axios from 'axios';
+import ShowToast from '../components/ShowToast';
 
 type SingleItemProps = NativeStackScreenProps<RootStackParamList, 'SingleItem'>;
 
@@ -43,7 +44,8 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
 
     const addToCart = () => {
         if (!isLoggedIn) {
-            Alert.alert("Please, log in first")
+            // Alert.alert("Please, log in first")
+            ShowToast({ text: "Please, log in first", success: false, position: 'top', topOffset: 30 })
             return
         }
 
@@ -67,14 +69,16 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
     const addToCartMutation = useMutation({
         mutationFn: addItemToCart,
         onSuccess: async (data) => {
-            Alert.alert(data.message)
+            // Alert.alert(data.message)
+            ShowToast({ text: data.message })
             cartItemCountRefetch()
         },
         onError: (error) => {
             if (axios.isAxiosError(error)) {
                 const backendMessage = error.response?.data?.message;
                 console.log("Backend Message:", backendMessage);
-                Alert.alert(backendMessage)
+                // Alert.alert(backendMessage)
+                ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
             } else {
                 console.log("Generic Error:", error.message);
             }
@@ -112,7 +116,7 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
                     <IonIcons name="arrow-back" style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={24} />
                 </TouchableOpacity>
 
-                <ThemedSearchBar placeholder='search' onSearch={onSearch} style={{ width: '70%', marginHorizontal: 10 }} />
+                <ThemedSearchBar placeholder='search' onSearch={onSearch} style={{ width: isLoggedIn ? '70%' : '85%', marginHorizontal: 10 }} />
 
                 {cartItemCount && <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('BottomTabs', { screen: 'Cart' })}>
                     <IonIcons name={cartItemCount > 0 ? "cart" : "cart-outline"} style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={24} />
@@ -150,6 +154,10 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
                         <ThemedText style={[styles.title, { color: theme.title }, { fontSize: 15 }]}>{data?.businessName}</ThemedText>
                         <Spacer height={5} />
                         <ThemedText style={[styles.text, { color: theme.text }]}>{data?.description}</ThemedText>
+                        {data?.distanceInMeters && <>
+                            <Spacer height={5} />
+                            <ThemedText style={[styles.text, { color: theme.text, fontSize: 12, fontWeight: '400' }]}>{Math.round(data.distanceInMeters / 1000)} KM from current location</ThemedText>
+                        </>}
                         <Spacer height={10} />
                         <ThemedText style={[styles.text, { color: theme.text, fontWeight: '700' }]}>₹{data?.price}</ThemedText>
                         <Spacer height={20} />

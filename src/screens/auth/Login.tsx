@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { navigationProp } from '../../navigation/AppNavigator'
@@ -16,6 +16,7 @@ import Spacer from '../../components/Spacer'
 import Logo from '../../components/Logo'
 import SecureTextInput from '../../components/SecureTextInput'
 import axios from 'axios'
+import ShowToast from '../../components/ShowToast'
 
 const Login = () => {
   const navigation = useNavigation<navigationProp>()
@@ -36,22 +37,21 @@ const Login = () => {
   const loginUserMutation = useMutation({
     mutationFn: login,
     onSuccess: async (data) => {
-      if (data?.status != "success") {
-        Alert.alert(data?.message)
-        return
-      }
       console.log("Login Successfully..!", data.user)
 
       saveLogin(data.user.userId, data.user.firstName, data.user.lastName, data.user.emailId, data.user.phoneNo, data.user.dob, data.user.gender, data.user.dietryPref, data.user.userRole, data.token)
-      Alert.alert("Logged in successfully..!")
+      // Alert.alert("Logged in successfully..!")
 
+      ShowToast({ text: data.message })
       navigation.navigate('BottomTabs', { screen: 'Home' })
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', bottomOffset:0, topOffset: 300 })
+        // ShowToast({ text: backendMessage, success: false })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -60,12 +60,14 @@ const Login = () => {
 
   const loginUser = () => {
     if (!emailId?.trim()) {
-      Alert.alert("Please enter email id")
+      // Alert.alert("Please enter email id")
+      ShowToast({ text: 'Please enter email id', success: false, position: 'top', topOffset: 30 })
       return
     }
 
     if (!password?.trim()) {
-      Alert.alert("Please enter password")
+      ShowToast({ text: 'Please enter password', success: false, position: 'top', topOffset: 30 })
+      // Alert.alert("Please enter password")
       return
     }
 

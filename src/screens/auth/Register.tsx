@@ -15,6 +15,7 @@ import ThemedButton from '../../components/ThemedButton'
 import Logo from '../../components/Logo'
 import SecureTextInput from '../../components/SecureTextInput'
 import axios from 'axios'
+import ShowToast from '../../components/ShowToast'
 
 const Register = () => {
   const navigation = useNavigation<navigationProp>()
@@ -46,13 +47,15 @@ const Register = () => {
       console.log("Registered successfully..!", data.message)
       Alert.alert("Registered successfully, log in to continue")
 
+      ShowToast({ text: data.message })
       navigation.navigate('Login')
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -75,7 +78,8 @@ const Register = () => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -98,7 +102,8 @@ const Register = () => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -114,6 +119,10 @@ const Register = () => {
   }
 
   const registerUser = () => {
+    if(!firstName.trim() || !lastName.trim() || !emailId.trim() || !phoneNo.trim() || !password.trim() || !cPassword.trim()) {
+      ShowToast({ text: "Please fill all the fileds", success: false, position: 'top', topOffset: 30 })
+      return
+    }
     registerUserMutation.mutate({ firstName, middleName: '', lastName, emailId, phoneNo, verified: isVerified, password, cPassword })
   }
 

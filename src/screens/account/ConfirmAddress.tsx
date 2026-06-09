@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { Colors } from '../../constants/Colors'
 import { RootStackParamList } from '../../navigation/AppNavigator'
@@ -16,6 +16,8 @@ import ThemedTextInput from '../../components/ThemedTextInput'
 import CustomRadioButton from '../../components/CustomRadioButton'
 import Spacer from '../../components/Spacer'
 import axios from 'axios'
+import ShowToast from '../../components/ShowToast'
+import ThemedDialogContainer from '../../components/ThemedDialogContainer'
 
 type ConfirmAddressProps = NativeStackScreenProps<RootStackParamList, 'ConfirmAddress'>;
 
@@ -35,6 +37,8 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
     const [addressType, setAddressType] = useState("home")
     const [addressName, setAddressname] = useState("")
 
+    const [isDialogVisible, setIsDialogVisible] = useState(false)
+
     const options = [
         { label: 'Home', value: 'home' },
         { label: 'Office', value: 'office' },
@@ -43,44 +47,49 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
 
     const onSubmit = () => {
         if (!fullName.trim() || !contactNo.trim() || !addLine.trim()) {
-            Alert.alert("Please fill all the required fields")
+            // Alert.alert("Please fill all the required fields")
+            ShowToast({ text: 'Please fill all the required fields', success: false, position: 'top', topOffset: 30 })
             return
         }
 
-        Alert.alert("Confirm details", "",
-            [
-                { text: 'Edit details', onPress: () => console.log('Cancel'), style: 'cancel' },
-                {
-                    text: 'Confirm', onPress: () => addAddressMutation.mutate({
-                        userId,
-                        addressRequest: {
-                            addressLine: addLine,
-                            area: route.params.address.display_name,
-                            latitude: route.params.address.lat,
-                            longitude: route.params.address.lon,
-                            receiverContactNo: contactNo,
-                            receiverName: fullName,
-                            addressName,
-                            addressType
-                        }
-                    })
-                }
-            ]
-        )
+        // Alert.alert("Confirm details", "",
+        //     [
+        //         { text: 'Edit details', onPress: () => console.log('Cancel'), style: 'cancel' },
+        //         {
+        //             text: 'Confirm', onPress: () => addAddressMutation.mutate({
+        //                 userId,
+        //                 addressRequest: {
+        //                     addressLine: addLine,
+        //                     area: route.params.address.display_name,
+        //                     latitude: route.params.address.lat,
+        //                     longitude: route.params.address.lon,
+        //                     receiverContactNo: contactNo,
+        //                     receiverName: fullName,
+        //                     addressName,
+        //                     addressType
+        //                 }
+        //             })
+        //         }
+        //     ]
+        // )
+
+        setIsDialogVisible(true)
     }
 
     const addAddressMutation = useMutation({
         mutationFn: addAddress,
         onSuccess: async (data) => {
             console.log(data.message)
-            Alert.alert(data.message)
+            // Alert.alert(data.message)
+            ShowToast({ text: data.message })
             navigation.navigate('BottomTabs', { screen: 'Account' })
         },
         onError: (error) => {
             if (axios.isAxiosError(error)) {
                 const backendMessage = error.response?.data?.message;
                 console.log("Backend Message:", backendMessage);
-                Alert.alert(backendMessage)
+                // Alert.alert(backendMessage)
+                ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
             } else {
                 console.log("Generic Error:", error.message);
             }
@@ -166,6 +175,30 @@ const ConfirmAddress = ({ route, navigation }: ConfirmAddressProps) => {
             <ThemedButton style={{ margin: 10 }} disabled={addAddressMutation.isPending} onPress={onSubmit}>
                 <ThemedText btnText={true} style={styles.btnText}>{addAddressMutation.isPending ? "Loading..." : "Add new Address"}</ThemedText>
             </ThemedButton>
+
+            <ThemedDialogContainer
+                visible={isDialogVisible}
+                title="Please confirm address details"
+                desc={`Receiver Details: \nFull Name: ${fullName}\nContact No.: ${contactNo}\n\nLocation Details:\n${addLine}, ${street}${street ? ', ' : ''} ${route.params.address.display_name}`}
+                value={route.params.address.display_name}
+                placeholder="enter the otp here"
+                addressContainer={true}
+                btn1Label="Edit details"
+                btn2Label="CONFIRM"
+                btn1OnPress={() => setIsDialogVisible(false)}
+                btn2OnPress={() => addAddressMutation.mutate({
+                    userId,
+                    addressRequest: {
+                        addressLine: addLine,
+                        area: route.params.address.display_name,
+                        latitude: route.params.address.lat,
+                        longitude: route.params.address.lon,
+                        receiverContactNo: contactNo,
+                        receiverName: fullName,
+                        addressName,
+                        addressType
+                    }
+                })} />
         </ThemedView>
     )
 }

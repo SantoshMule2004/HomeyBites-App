@@ -1,16 +1,16 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Colors } from '../../constants/Colors'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 import { navigationProp } from '../../navigation/AppNavigator'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useUserStore } from '../../stores/useUserStore'
 
+import React from 'react'
 import SectionItemList from '../../components/SectionList'
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useUserStore } from '../../stores/useUserStore'
 
 const Account = () => {
   const colorScheme = useAppTheme()

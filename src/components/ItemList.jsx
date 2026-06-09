@@ -22,7 +22,10 @@ const ItemList = ({ data, onItemClicked }) => {
                 <View style={styles.cardDesc}>
                     <Text style={[styles.title, { color: theme.title }]}>{item.menuName}</Text>
                     <Text style={[styles.text, { color: theme.text }]}>{item.description}</Text>
-                    <Text style={[styles.text, { color: theme.text }]}>₹{item.currentPrice}</Text>
+                    {item?.distanceInMeters &&
+                        <Text style={[styles.text, { color: theme.text, fontSize: 12, fontWeight: '400' }]}>{Math.round(item.distanceInMeters / 1000)} KM from current location</Text>
+                    }
+                    <Text style={[styles.text, { color: theme.text }]}>₹{item.price}</Text>
                 </View>
             </View>
         </Pressable>

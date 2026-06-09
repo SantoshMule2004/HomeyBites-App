@@ -17,6 +17,7 @@ import Logo from '../components/Logo'
 import ThemedText from '../components/ThemedText'
 import IonIcons from '../components/IonIcons'
 import LoadingContainer from '../components/LoadingContainer'
+import ShowToast from '../components/ShowToast'
 
 const data = [
     { id: '1', title: 'Ghar Ka Khana', subTitle: '"The Taste of Home, Wherever You Are!"', url: require('../assets/header1.jpeg') },
@@ -37,7 +38,6 @@ const Home = () => {
         console.log("query: ", query)
         Alert.alert("Query", query)
     }
-
 
     const { data: breakfastData, isPending: breakfastPending, isFetching: breakfastFetching, error: breakfastError, refetch: refetchBreakfast, } = useQuery({
         queryKey: ['nearby-menuitems-brekfast', coords],
@@ -82,8 +82,6 @@ const Home = () => {
                 <CustomCarousel data={data} />
 
                 <Spacer height={20} />
-
-             
 
                 <Heading title='Breakfast options' onClick={() => Alert.alert("Breakfast options")} />
                 <Spacer height={5} />

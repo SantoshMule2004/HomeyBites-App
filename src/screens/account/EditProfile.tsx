@@ -2,6 +2,12 @@ import { Alert, Pressable, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { Colors } from '../../constants/Colors'
+import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
+import { useNavigation } from '@react-navigation/native'
+import { verifyOtpOnServer } from '../../services/AuthService'
+import { useUserStore } from '../../stores/useUserStore'
+import { useMutation } from '@tanstack/react-query'
+import { sendOtp, updateUserDetails, updateUserEmail } from '../../services/UserService'
 
 import EditableImage from '../../components/EditableImage'
 import Spacer from '../../components/Spacer'
@@ -10,13 +16,8 @@ import ThemedView from '../../components/ThemedView'
 import ThemedTextInput from '../../components/ThemedTextInput'
 import ThemedText from '../../components/ThemedText'
 import ThemedDialogContainer from '../../components/ThemedDialogContainer'
-import { useUserStore } from '../../stores/useUserStore'
-import { useMutation } from '@tanstack/react-query'
-import { sendOtp, updateUserDetails, updateUserEmail } from '../../services/UserService'
 import axios from 'axios'
-import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
-import { useNavigation } from '@react-navigation/native'
-import { verifyOtpOnServer } from '../../services/AuthService'
+import ShowToast from '../../components/ShowToast'
 
 const EditProfile = () => {
   const colorScheme: string = useAppTheme()
@@ -45,7 +46,8 @@ const EditProfile = () => {
     onSuccess: async (data) => {
       console.log(data.message)
 
-      Alert.alert(data.message)
+      // Alert.alert(data.message)
+      ShowToast({ text: data.message })
       updateDetails(firstName, lastName)
       navigation.navigate('AccountInfo')
     },
@@ -53,7 +55,8 @@ const EditProfile = () => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -67,7 +70,8 @@ const EditProfile = () => {
       console.log(data.message)
 
       setIsDialogVisible(false)
-      Alert.alert(data.message)
+      // Alert.alert(data.message)
+      ShowToast({ text: data.message })
       updateEmail(emailId)
       navigation.navigate('AccountInfo')
     },
@@ -75,7 +79,8 @@ const EditProfile = () => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -88,13 +93,15 @@ const EditProfile = () => {
     onSuccess: async (data) => {
       console.log(data.message)
       setIsDialogVisible(true)
-      Alert.alert(data.message)
+      // Alert.alert(data.message)
+      ShowToast({ text: data.message })
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -108,7 +115,8 @@ const EditProfile = () => {
       console.log(data.message)
 
       if (eId === emailId) {
-        Alert.alert(data.message)
+        // Alert.alert(data.message)
+        ShowToast({ text: data.message })
         setIsDialogVisible(false)
       } else {
         // change email to specified
@@ -119,7 +127,8 @@ const EditProfile = () => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }
@@ -128,7 +137,8 @@ const EditProfile = () => {
 
   const onSubmit = () => {
     if (!firstName.trim() || !lastName.trim()) {
-      Alert.alert("Please enter the details first")
+      // Alert.alert("Please enter the details first")
+      ShowToast({ text: "Please enter the details first", success: false, position: 'top', topOffset: 30 })
       return
     }
     updateDetailsMutation.mutate({ userId, updateDetailsDto: { firstName, lastName } })
@@ -136,7 +146,8 @@ const EditProfile = () => {
 
   const onVerifyOtp = () => {
     if (!otp.trim()) {
-      Alert.alert("Please enter the OTP")
+      // Alert.alert("Please enter the OTP")
+      ShowToast({ text: "Please enter the OTP", success: false, position: 'top', topOffset: 30 })
       return
     }
     verifyOtpMutation.mutate({ otp, emailId })
@@ -144,7 +155,8 @@ const EditProfile = () => {
 
   const onSendOtp = () => {
     if (!emailId.trim()) {
-      Alert.alert("Email field cannot be empty")
+      // Alert.alert("Email field cannot be empty")
+      ShowToast({ text: "Email field cannot be empty", success: false, position: 'top', topOffset: 30 })
       return
     }
     sendOtpMutation.mutate(emailId)

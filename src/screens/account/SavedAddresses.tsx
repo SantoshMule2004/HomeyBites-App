@@ -1,21 +1,21 @@
 import { Alert, RefreshControl, StyleSheet, View } from 'react-native'
-import React from 'react'
-import { Address } from '../../types/Type'
-
-import ThemedView from '../../components/ThemedView'
-import CustomAddress from '../../components/CustomAddress'
-import CustomTextWithIcon from '../../components/CustomTextWithIcon'
-import Spacer from '../../components/Spacer'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 import { useNavigation } from '@react-navigation/native'
 import { navigationProp } from '../../navigation/AppNavigator'
 import { useUserStore } from '../../stores/useUserStore'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { deleteAddress, getAddresses } from '../../services/UserService'
-import ThemedText from '../../components/ThemedText'
 import { useAppTheme } from '../../stores/useAppTheme'
 import { Colors } from '../../constants/Colors'
+
+import React from 'react'
+import ThemedView from '../../components/ThemedView'
+import CustomAddress from '../../components/CustomAddress'
+import CustomTextWithIcon from '../../components/CustomTextWithIcon'
+import Spacer from '../../components/Spacer'
+import ThemedText from '../../components/ThemedText'
 import axios from 'axios'
+import ShowToast from '../../components/ShowToast'
 
 
 const SavedAddresses = () => {
@@ -55,7 +55,8 @@ const SavedAddresses = () => {
     mutationFn: deleteAddress,
     onSuccess: async (data) => {
       console.log(data.message)
-      Alert.alert(data.message)
+      // Alert.alert(data.message)
+      ShowToast({ text: data.message })
 
       refetch()
     },
@@ -63,7 +64,8 @@ const SavedAddresses = () => {
       if (axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message;
         console.log("Backend Message:", backendMessage);
-        Alert.alert(backendMessage)
+        // Alert.alert(backendMessage)
+        ShowToast({ text: backendMessage, success: false, position: 'top', topOffset: 30 })
       } else {
         console.log("Generic Error:", error.message);
       }

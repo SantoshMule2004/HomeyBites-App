@@ -14,8 +14,6 @@ import ItemList from '../components/ItemList'
 const SearchScreen = () => {
     const navigation = useNavigation<navigationProp>()
 
-    // const [data, setData] = useState<dataType[]>()
-
     const { coords, displayAdd, address, loading, error: useLocationError, refreshLocation } = useCurrentLocation();
     useEffect(() => {
         refreshLocation();

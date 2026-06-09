@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, FlatList, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { accountNavigationProp } from '../../navigation/AccountStackNavigator'
 import { useAppTheme } from '../../stores/useAppTheme'
@@ -6,7 +6,7 @@ import { Colors } from '../../constants/Colors'
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useDebounce } from '../../hooks/useDebounce'
-import { LocationIQAutocompleteResult } from '../../types/Type'
+import { LocationIQAutocompleteResult } from '../../types/LocationType'
 import { navigationProp } from '../../navigation/AppNavigator'
 import { autocomplete } from '../../services/LocationIQService'
 import { useCurrentLocation } from '../../hooks/useCurrentLocation'
@@ -18,6 +18,7 @@ import ThemedCard from '../../components/ThemedCard'
 import ThemedText from '../../components/ThemedText'
 import ThemedButton from '../../components/ThemedButton'
 import Spacer from '../../components/Spacer'
+import ShowToast from '../../components/ShowToast'
 
 
 const AddNewAddress = () => {
@@ -41,7 +42,8 @@ const AddNewAddress = () => {
 
     const handleConfirm = () => {
         if (!displayAdd && !data) {
-            Alert.alert("Please enter valid address")
+            // Alert.alert("Please enter valid address")
+           ShowToast({ text: 'Please enter valid address', success: false, position: 'top', topOffset: 30 })
             return
         }
 
