@@ -22,7 +22,7 @@ const ItemList = ({ data, onItemClicked }) => {
                 <View style={styles.cardDesc}>
                     <Text style={[styles.title, { color: theme.title }]}>{item.menuName}</Text>
                     <Text style={[styles.text, { color: theme.text }]}>{item.description}</Text>
-                    <Text style={[styles.text, { color: theme.text }]}>₹{item.price}</Text>
+                    <Text style={[styles.text, { color: theme.text }]}>₹{item.currentPrice}</Text>
                 </View>
             </View>
         </Pressable>

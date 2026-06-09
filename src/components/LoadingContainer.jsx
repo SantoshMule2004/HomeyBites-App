@@ -4,10 +4,10 @@ import { Colors } from '../constants/Colors'
 import React from 'react'
 import ThemedView from './ThemedView'
 
-const LoadingContainer = ({ style = {} }) => {
+const LoadingContainer = ({ style = {}, size = 'large', color = Colors.primary }) => {
     return (
         <ThemedView style={[styles.loadingContainer, style]}>
-            <ActivityIndicator size='large' color={Colors.primary} />
+            <ActivityIndicator size={size} color={color} />
         </ThemedView>
     )
 }

@@ -1,20 +1,25 @@
 import { ApiResponse } from "../types/RegisterUserRequest"
-import { CartItem } from "../types/UserResponse"
+import { CartDto, CartItem } from "../types/UserResponse"
 import { PrivateApiClient } from "./apiClient"
 
 // this will be updated
 export const getCartItems = async (userId: number) => {
-    const response = await PrivateApiClient.get<ApiResponse<CartItem[]>>(`/api/v1/cart/${userId}`)
+    const response = await PrivateApiClient.get<CartDto>(`/api/v1/cart/items/${userId}`)
     return response.data
 }
 
-export const addItemToCart = async (userId: number, itemId: number) => {
-    const response = await PrivateApiClient.post<ApiResponse<null>>(`/api/v1/cart/${userId}/item/${itemId}`)
+export const getCartItemsCount = async (userId: number) => {
+    const response = await PrivateApiClient.get<number>(`/api/v1/cart/items/count/${userId}`)
     return response.data
 }
 
-export const updateCartItem = async (cartItemId: number, quantity: number) => {
-    const response = await PrivateApiClient.put<ApiResponse<null>>(`/api/v1/cart/${cartItemId}/quantity/${quantity}`)
+export const addItemToCart = async (data: { userId: number, itemId: number }) => {
+    const response = await PrivateApiClient.post<ApiResponse<null>>(`/api/v1/cart/${data.userId}/item/${data.itemId}`)
+    return response.data
+}
+
+export const updateCartItem = async (data: { cartItemId: number, quantity: number }) => {
+    const response = await PrivateApiClient.put<ApiResponse<null>>(`/api/v1/cart/${data.cartItemId}/quantity/${data.quantity}`)
     return response.data
 }
 

@@ -5,7 +5,7 @@ import { useAppTheme } from '../stores/useAppTheme'
 import { Colors } from '../constants/Colors'
 import ThemedText from './ThemedText'
 
-const CartItem = ({ data }) => {
+const CartItem = ({ data, refreshControl, onValueChange }) => {
     const colorScheme = useAppTheme()
     const theme = Colors[colorScheme] ?? Colors.light
 
@@ -17,18 +17,18 @@ const CartItem = ({ data }) => {
         <View style={[styles.itemContainer]}>
             <View style={styles.cardDesc}>
                 <View style={{ flex: 1 }}>
-                    <Text style={[styles.title, { color: theme.title }]}>{item.title}</Text>
-                    <Text style={[styles.text, { color: theme.text }]}>{item.desc}</Text>
-                    <Text style={[styles.text, { color: theme.text }]}>{item.price}</Text>
+                    <Text style={[styles.title, { color: theme.title }]}>{item.menuName}</Text>
+                    <Text style={[styles.text, { color: theme.text }]}>{item.description}</Text>
+                    <Text style={[styles.text, { color: theme.text }]}>₹{item.currentPrice}</Text>
                 </View>
 
-                <CapsuleCounter />
+                <CapsuleCounter initialValue={item.quantity} cartItemId={item.cartItemId} onValueChange={onValueChange} />
             </View>
 
             <Image
                 style={styles.cardImage}
                 source={{
-                    uri: item.url
+                    uri: item.imageUrl
                 }}
                 resizeMode='cover' />
         </View>
@@ -44,10 +44,11 @@ const CartItem = ({ data }) => {
         <View style={styles.container}>
             <FlatList
                 data={data}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.cartItemId}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={Divider}
+                refreshControl={refreshControl}
                 ListEmptyComponent={EmptyMenu}
             />
         </View>

@@ -85,4 +85,10 @@ export interface CartItem {
     format: string;
     categoryId: number;
     providerId: number;
+    businessName: string;
+}
+
+export interface CartDto {
+    cartItems: CartItem[],
+    grandTotal: number
 }

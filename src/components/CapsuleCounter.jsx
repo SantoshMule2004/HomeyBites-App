@@ -7,7 +7,8 @@ const CapsuleCounter = ({
   initialValue = 0,
   minValue = 0,
   maxValue = 10,
-  onValueChange
+  onValueChange,
+  cartItemId
 }) => {
   const colorScheme = useAppTheme()
   const theme = Colors[colorScheme] ?? Colors.light
@@ -18,7 +19,7 @@ const CapsuleCounter = ({
     if (count < maxValue) {
       const newCount = count + 1;
       setCount(newCount);
-      if (onValueChange) onValueChange(newCount);
+      if (onValueChange) onValueChange(newCount, cartItemId);
     }
   };
 
@@ -26,7 +27,7 @@ const CapsuleCounter = ({
     if (count > minValue) {
       const newCount = count - 1;
       setCount(newCount);
-      if (onValueChange) onValueChange(newCount);
+      if (onValueChange) onValueChange(newCount, cartItemId);
     }
   };
 

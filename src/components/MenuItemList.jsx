@@ -9,16 +9,16 @@ const MenuItemList = ({ data, onItemClicked }) => {
     const theme = Colors[colorScheme] ?? Colors.light
 
     const renderItem = ({ item }) => (
-        <Pressable onPress={() => onItemClicked(item.id)}>
+        <Pressable onPress={() => onItemClicked(item.menuId)}>
             <View style={[styles.itemContainer, { backgroundColor: theme.uiBackground }]}>
                 <Image
                     style={styles.cardImage}
                     source={{
-                        uri: item.url
+                        uri: item.imageUrl
                     }}
                     resizeMode='cover' />
 
-                <ThemedText numberOfLines={1} style={styles.title}>{item.title}</ThemedText>
+                <ThemedText numberOfLines={1} style={styles.title}>{item.menuName}</ThemedText>
             </View>
         </Pressable>
     );
@@ -34,7 +34,7 @@ const MenuItemList = ({ data, onItemClicked }) => {
             <FlatList
                 data={data}
                 horizontal
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.menuId}
                 renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
                 ListEmptyComponent={EmptyMenu}

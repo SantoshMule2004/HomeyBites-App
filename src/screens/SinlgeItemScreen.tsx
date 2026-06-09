@@ -5,7 +5,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { useAppTheme } from '../stores/useAppTheme';
 import { Colors } from '../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getMenuitemById } from '../services/MenuService';
 
 import ThemedView from '../components/ThemedView'
@@ -15,6 +15,9 @@ import ThemedText from '../components/ThemedText';
 import IonIcons from '../components/IonIcons';
 import ThemedSearchBar from '../components/ThemedSearchBar';
 import LoadingContainer from '../components/LoadingContainer';
+import { useUserStore } from '../stores/useUserStore';
+import { addItemToCart, getCartItemsCount } from '../services/CartService';
+import axios from 'axios';
 
 type SingleItemProps = NativeStackScreenProps<RootStackParamList, 'SingleItem'>;
 
@@ -27,8 +30,8 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
     const HEADER_HEIGHT = 70
     const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + insets.top;
 
-
-    const [cartItemCount, setCartItemCount] = useState(0)
+    const isLoggedIn = useUserStore((state) => state.isLoggedIn)
+    const userId = useUserStore((state) => state.userId)
 
     const id = route.params.itemId
 
@@ -38,12 +41,45 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
         Alert.alert("onSearch")
     }
 
+    const addToCart = () => {
+        if (!isLoggedIn) {
+            Alert.alert("Please, log in first")
+            return
+        }
+
+        addToCartMutation.mutate({ userId, itemId: data?.menuId! })
+    }
+
+    const { data: cartItemCount, isPending: cartItemCountPending, refetch: cartItemCountRefetch } = useQuery({
+        queryKey: ['cart-items-count', isLoggedIn],
+        queryFn: () => getCartItemsCount(userId),
+        enabled: isLoggedIn,
+        // staleTime: 1000 * 60 * 5,
+    });
+
     const { data, isPending, isFetching, error, refetch, } = useQuery({
         queryKey: ['menuitem-single', id],
         queryFn: () => getMenuitemById({ menuId: Number(id), userLat: route.params.userLat, userLng: route.params.userLng }),
         enabled: true,
         // staleTime: 1000 * 60 * 5,
     });
+
+    const addToCartMutation = useMutation({
+        mutationFn: addItemToCart,
+        onSuccess: async (data) => {
+            Alert.alert(data.message)
+            cartItemCountRefetch()
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                const backendMessage = error.response?.data?.message;
+                console.log("Backend Message:", backendMessage);
+                Alert.alert(backendMessage)
+            } else {
+                console.log("Generic Error:", error.message);
+            }
+        }
+    })
 
     const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -78,14 +114,14 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
 
                 <ThemedSearchBar placeholder='search' onSearch={onSearch} style={{ width: '70%', marginHorizontal: 10 }} />
 
-                <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('BottomTabs', { screen: 'Cart' })}>
+                {cartItemCount && <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('BottomTabs', { screen: 'Cart' })}>
                     <IonIcons name={cartItemCount > 0 ? "cart" : "cart-outline"} style={{ backgroundColor: 'transparent', borderRadius: 0 }} size={24} />
                     <View style={styles.badge}>
                         <Text style={styles.badgeText}>
                             {cartItemCount > 99 ? '99+' : cartItemCount}
                         </Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </Animated.View>
 
             {isPending ? <LoadingContainer style={{ justifyContent: 'center', aliginItems: 'center' }} /> :
@@ -110,24 +146,26 @@ const SinlgeItemScreen = ({ route, navigation }: SingleItemProps) => {
 
                     <View style={styles.itemDesc}>
                         <ThemedText style={[styles.title, { color: theme.title }]}>{data?.menuName}</ThemedText>
-                        <Spacer height={10} />
+                        <Spacer height={5} />
+                        <ThemedText style={[styles.title, { color: theme.title }, { fontSize: 15 }]}>{data?.businessName}</ThemedText>
+                        <Spacer height={5} />
                         <ThemedText style={[styles.text, { color: theme.text }]}>{data?.description}</ThemedText>
                         <Spacer height={10} />
-                        <ThemedText style={[styles.text, { color: theme.text, fontWeight: '700' }]}>{data?.price}</ThemedText>
+                        <ThemedText style={[styles.text, { color: theme.text, fontWeight: '700' }]}>₹{data?.price}</ThemedText>
                         <Spacer height={20} />
-                        <ThemedText style={[styles.title, { color: theme.title }]}>Delivery Details</ThemedText>
-                        <Spacer height={10} />
+                        {/* <ThemedText style={[styles.title, { color: theme.title }]}>Delivery Details</ThemedText>
+                        <Spacer height={10} /> */}
                     </View>
                 </Animated.ScrollView>}
 
             <View style={styles.btns}>
-                <ThemedButton style={{ flex: 1, borderRadius: 20, backgroundColor: '#eee' }} onPress={() => setCartItemCount(2)}>
-                    <ThemedText style={{ textAlign: 'center' }}>Add to cart</ThemedText>
+                <ThemedButton style={{ flex: 1, borderRadius: 20, }} disabled={addToCartMutation.isPending} onPress={addToCart}>
+                    <ThemedText btnText={true} style={{ textAlign: 'center' }}>{addToCartMutation.isPending ? "Loading..." : "Add to cart"}</ThemedText>
                 </ThemedButton>
 
-                <ThemedButton style={{ flex: 1, borderRadius: 20 }}>
+                {/* <ThemedButton style={{ flex: 1, borderRadius: 20 }}>
                     <ThemedText btnText={true} style={{ textAlign: 'center' }}>Buy now</ThemedText>
-                </ThemedButton>
+                </ThemedButton> */}
             </View>
         </ThemedView>
     )
@@ -194,7 +232,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 4,
-        borderWidth: 2,
     },
     badgeText: {
         color: '#FFFFFF',
