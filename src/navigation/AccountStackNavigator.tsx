@@ -1,13 +1,12 @@
-import React from 'react'
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import SavedAddresses from '../screens/account/SavedAddresses';
-import Account from '../screens/account/Account';
 import { Colors } from '../constants/Colors';
 import { useAppTheme } from '../stores/useAppTheme';
+
+import React from 'react'
+import SavedAddresses from '../screens/account/SavedAddresses';
+import Account from '../screens/account/Account';
 import EditProfile from '../screens/account/EditProfile';
 import ForgetPassword from '../screens/account/ForgetPassword';
-import AddAddress from '../screens/account/AddAddress';
-import AddNewAddress from '../screens/account/AddNewAddress';
 import ResetPassword from '../screens/account/ResetPassword';
 
 const AccountStack = createNativeStackNavigator();

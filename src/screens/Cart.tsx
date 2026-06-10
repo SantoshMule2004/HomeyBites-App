@@ -14,10 +14,14 @@ import CartItem from '../components/CartItem'
 import LoadingContainer from '../components/LoadingContainer'
 import axios from 'axios'
 import ShowToast from '../components/ShowToast'
+import { navigationProp } from '../navigation/AppNavigator'
+import { useNavigation } from '@react-navigation/native'
 
 const Cart = () => {
   const colorScheme: string = useAppTheme()
   const theme = colorScheme == "light" ? Colors.light : Colors.dark
+
+  const navigation = useNavigation<navigationProp>()
 
   const insets = useSafeAreaInsets()
   const userId = useUserStore((state) => state.userId)
@@ -89,8 +93,8 @@ const Cart = () => {
           <ThemedText style={{ fontSize: 20, fontWeight: '600' }}>Subtotal</ThemedText>
           <ThemedText style={{ fontSize: 20 }}>₹{data?.grandTotal || 0}</ThemedText>
         </View>
-        <ThemedButton style={styles.btn}>
-          <ThemedText btnText={true}>Place Order</ThemedText>
+        <ThemedButton style={styles.btn} onPress={() => navigation.navigate('PlaceOrder')}>
+          <ThemedText btnText={true}>Proceed to Pay</ThemedText>
         </ThemedButton>
       </ThemedView>
       <ThemedView style={styles.itemContainer}>

@@ -1,12 +1,13 @@
-import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAppTheme } from '../stores/useAppTheme';
 import { Colors } from '../constants/Colors';
+import { TouchableWithoutFeedback, View } from 'react-native';
+
+import React from 'react'
 import Home from '../screens/Home';
 import Cart from '../screens/Cart';
 import IonIcons from '../components/IonIcons'
 import AccountStackNavigator from './AccountStackNavigator';
-import { TouchableWithoutFeedback, View } from 'react-native';
 
 const bottomBar = createBottomTabNavigator()
 
